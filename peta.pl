@@ -1,6 +1,4 @@
 :-dynamic(map/1).
-resCal :- retract(map(_)), fail.
-resCal.
 
 startMap(
 /* Bentuk dari map awal*/
@@ -20,7 +18,7 @@ startMap(
 ).
 
 
-/* Getters and Setters of a map */
+/* Primitive Operation */
 getElmtList([H | _], 1, H):-!.
 getElmtList([H | T], Index, Val):-
     Index1 is Index - 1,
@@ -50,8 +48,35 @@ printList([A]):-write(A),nl,!.
 printList([A|T]):-write(A),printList(T).
 
 displayMap([A]):-printList(A),nl,!.
-displayMap([A|T]):-printList(A),nl,printMap(T).
+displayMap([A|T]):-printList(A),nl,displayMap(T).
+
+
+getXY(IdxLokasi, X, Y):-
+/* Get index matrix */
+    IdxLokasi=<9,
+    X is 13, 
+    Y is (11 - IdxLokasi),!.
+getXY(IdxLokasi, X, Y):-
+/* Get index matrix */
+    IdxLokasi>=10, IdxLokasi=<16, 
+    X is 20 - IdxLokasi, 
+    Y is 2,!.
+getXY(IdxLokasi, X, Y):-
+/* Get index matrix */
+    IdxLokasi>=17, IdxLokasi=<25, 
+    X is 1,
+    Y is IdxLokasi - 15,!.    
+getXY(IdxLokasi, X, Y):-
+/* Get index matrix */
+    IdxLokasi>=26, IdxLokasi=<32, 
+    X is IdxLokasi - 22,
+    Y is 4,!.        
+
+getLocation(IdxLokasi, NamaLokasi):-
+/* Menampilkan nama lokasi dari index lokasi */
+    getElmtList(['GO', 'A1','A2','A3','CC','B1','B2','B3','JL','C1','C2','C3','TX','D1','D2','D3','FP',
+                 'E1','E2','E3','CC','F1','F2','F3','WT','G1','G2','G3','TX','CC','H1','H2'], IdxLokasi, NamaLokasi).
 
 
 /* Operation of a Map */
-initMap:-resCal,startMap(M),assertz(map(M)),printMap(M).
+initMap:-startMap(M),assertz(map(M)),displayMap(M).
