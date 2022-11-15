@@ -1,0 +1,93 @@
+/**** FACTS ****/
+// Dynamic Facts
+:- dynamic(nama_pemain/1) 
+:- dynamic(aset_pemain/4)
+:- dynamic(lokasi_pemain/3)
+:- dynamic(card_pemain/2)
+:- dynamic(count_pemain/3)
+:- dynamic(map/1)
+:- dynamic(property/7)
+:- dynamic(kepemilikan/2)
+:- dynamic(turn/1)
+
+nama_pemain(Nama)
+aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)
+lokasi_pemain(Nama, Indeks)
+card_pemain(Nama, Daftar_card)
+count_pemain(Nama, Count_jail, Count_double)
+# Nama:             String              -> Nama pemain
+# Indeks:           Int                 -> Indeks pemain pada peta
+# Uang:             Int                 -> Uang yang dimiliki pemain
+# Nilai_properti:   Int                 -> Total nilai properti pemain
+# Daftar_properti:  list of string      -> List dari ID properti yang dimiliki pemain (Contoh: D1, A2, B3, dll)
+# Daftar_card:      list of string      -> List dari nama chance card yang dimiliki pemain
+# Count_jail :      Int                 -> udh berapa turn ada di dalem penjara
+# Count_double:     Int                 -> udh berapa kali dapet double dalem satu turn
+
+map(Map)
+# Map:              list of lists       -> peta permainan monopoly
+
+property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)
+# ID:                   String          -> ID properti
+# Nama_properti:        String          -> Nama properti
+# Deskripsi_properti:   String          -> Deskripsi dari properti
+# Tipe:                 Int             -> Tipe dari bangunan properti (0: rumah, 1: bangunan_1, 2: bangunan_2, 3: bangunan_3, 4: landmark)
+# Rent:                 Int             -> biaya sewa properti saat ini
+# Akuisisi:             Int             -> biaya akuisisi properti
+# Blok:                 String          -> blok dari properti (Contoh: A, B, C, dll)
+
+kepemilikan(Pemilik, ID)
+# Pemilik -> Nama pemilik
+# ID -> ID Properti
+
+turn(Nama_pemain)
+
+
+// Static Facts
+propertyValue(ID, Buy0, Buy1, Buy2, Buy3, Buy4, Rent0, Rent1, Rent2, Rent3, Rent4)
+# ID:            String       -> ID properti
+# Buy0           Int          -> Harga tanah properti
+# Buy1:          Int          -> Harga bangunan_1 properti
+# Buy2:          Int          -> Harga bangunan_2 properti
+# Buy3:          Int          -> Harga bangunan_3 properti
+# Buy4:          Int          -> Harga landmark properti
+# Rent0:         Int          -> Biaya sewa tanah properti
+# Rent1:         Int          -> Biaya sewa bangunan_1 properti
+# Rent2:         Int          -> Biaya sewa bangunan_2 properti
+# Rent3:         Int          -> Biaya sewa bangunan_3 properti
+# Rent4:         Int          -> Biaya sewa landmark properti
+
+/***** RULES *****/
+initPlayer                                -> Inisialisasi data kedua pemain
+checkPlayerDetail(Nama_pemain)            -> Display informasi dari pemain secara detail)
+displayProperty(Nama_pemain)              -> Display properti yang dimiliki pemain dengan format <kodeproperti>-<kondisiproperti>
+displayCard(Nama_pemain)                  -> Display seluruh chance card yang dimiliki oleh pemain
+Reset                                     -> Reset data pemain
+
+passGO         -> menambah uang pemain ketika melewati ‘GO’ atau persis berada di ‘GO’ setelah melangkah
+buildableGO    -> Membangun rumah ketika persis berada di ‘GO’ setelah melangkah
+
+initMap                               -> assign value dari startMap ke dynamic value map
+startMap                              -> Mendapatkan lokasi awal map
+getElmtMap(Map, X, Y, Val)            -> Mendapatkan value dari map dengan index X, Y
+setElmtMap(MapIn, X, Y, Val, MapOut)  -> Mengubah map pada index X, Y menjadi Val
+displayMap(Map)                       -> Menampilkan map
+getXY(IndexLokasi, X, Y)              -> mengubah indeks dari map menjadi index matriks
+getLocation(IdxLokasi, NamaLokasi)    -> mendapatkan nama llokasi dari index lokasi
+
+chanceCard.     -> Meng-generate kartu kesempatan dan menyimpannya ke dalam player variable
+goToJail.       -> Memindahkan pemain dari posisi saat ini ke penjara dan mengubah statusnya emnjadi tahanan
+outFromJail(X)  -> Mengeluarkan pemain dari penjara dengan metode X, metode dapat berupa pembayaran uang, roll dadu atau chance card 
+
+checkPropertyDetail(x)      -> Mencetak detail dari properti dengan nama X
+payRent(X, Y)               -> Membayar sewa yang harus dibayarkan X apabila Y merupakan properti
+payAkuisisi(X, Z)           -> Membayar biaya akuisisi yang harus dibayarkan X untuk mengakuisisi bangunan Z
+
+payTax.                             -> mengurangi uang pemain dengan sejumlah tax yang harus dibayarkan
+worldTour.                          -> pergi ke lokasi yang dipilih saat tiba di world tour
+throwDice.                          -> merandom dadu 1 dan dadu 2, kemudian pemain bergerak sebanyak jumlah dari dadu
+beli.                               -> membeli bangunan di lokasi yang kosong
+upgrade.                            -> meningkatkan level bangunan yang dimiliki pemain
+isDouble(dadu_1, dadu_2, Double).   -> membuat nilai Double menjadi 1 jika dadu_1 == dadu_2
+
+appendList(List_Awal, Value, List_Akhir)  -> Menambahkan elemen ke dalam list

@@ -1,0 +1,64 @@
+PEMBAGIAN TUGAS
+13521109 Rizky Abdillah Rasyid
+- Chance cards
+- Jail
+- Coin flip
+
+13521121 Saddam Annais Shaquille
+- Map Selector
+- Map Initialization
+- Map Indexing
+- Map Display
+- Map operations
+- Color set
+
+13521122 Ulung Adi Putra
+- Buy property
+- Upgrade property
+- Dice
+- Tax
+- World Tour
+
+13521131 Jeremya Dharmawan Raharjo
+- Property Initialization
+- Property data
+- Check property details
+- Pay Rent
+- Akuisisi
+
+13521157 Hanif Muhammad Zhafran
+- Player Initialization
+- Player data
+- Check player details
+- Bankrupt system
+- Buildable GO
+
+PROGRESS
+I. COMPLETED TASKS
+- startMap
+- initMap
+- getElmtMap
+- setElmtMap
+- displayMap
+- Initialize player data
+- Player variables
+- getXY
+
+II. ONGOING TASKS
+- Check player details
+- outFromJail
+- goToJail
+- chanceCard
+- Initialize Building Data
+- Building Variables
+- Dice
+- Pay tax
+
+III. UNSTARTED TASKS
+- Main
+- Buildable GO
+- Bankrupt
+- payRent
+- payAkuisisi
+- checkPropertyDetails
+- World tour
