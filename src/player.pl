@@ -2,7 +2,7 @@
 :- dynamic(nama_pemain/1).
 :- dynamic(turn/1).
 :- dynamic(aset_pemain/4).
-:- dynamic(lokasi_pemain/3).
+:- dynamic(lokasi_pemain/2).
 :- dynamic(card_pemain/2).
 :- dynamic(count_pemain/3).
 
