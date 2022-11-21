@@ -1,8 +1,8 @@
 :- include('player.pl')
 
-beli :-
-    lokasi_pemain(Nama, Indeks),
-    property(ID, _Nama_properti, Indeks, _Deskripsi_properti, _Tipe, _Rent, _Akuisisi, _Blok),
+beli(nama) :-
+    retract(lokasi_pemain(Nama, Indeks)),
+    retract(property(ID, _Nama_properti, Indeks, _Deskripsi_properti, _Tipe, _Rent, _Akuisisi, _Blok)),
     kepemilikan(Pemilik, ID),
     Pemilik == 'None',
     write('Ingin bangun sampai tingkat berapa? (0/1/2/3) '), nl,

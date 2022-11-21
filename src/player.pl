@@ -5,6 +5,8 @@
 :- dynamic(lokasi_pemain/2).
 :- dynamic(card_pemain/2).
 :- dynamic(count_pemain/3).
+:- dynamic(list_player/2).
+:- dynamic(jail_status/2).
 
 /* rule pemain untuk informasi pemain secara keseluruhan */
 pemain(Nama, Indeks, Uang, Nilai_properti, Daftar_properti, Daftar_card, Count_jail, Count_double) :-
@@ -16,13 +18,14 @@ pemain(Nama, Indeks, Uang, Nilai_properti, Daftar_properti, Daftar_card, Count_j
 
 /* Inisialisasi data pemain */
 initPlayer :-
-    write('MONOPOLY GAME'), nl,
-    write('Masukkan nama pemain 1:'), nl,
-    read(Nama1),
+    write('    MONOPOLY GAME'), nl,
+    write('    Masukkan nama pemain 1:'), nl,
+    write('    '), read(Nama1),nl,
     Fact =.. [nama_pemain, Nama1],
     asserta(Fact),
-    write('Masukkan nama pemain 2:'), nl,
-    read(Nama2),
+    write('    Masukkan nama pemain 2:'), nl,
+    write('    '), read(Nama2),
+    assertz(list_player([Nama1, Nama2], 1)),
     asserta(nama_pemain(Nama2)),
     (
         forall(

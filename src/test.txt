@@ -2,53 +2,46 @@
 :- include('peta.pl').
 :- include('jail.pl').
 
+% throwDice :-
+%     retract(count_pemain(Nama, Count_jail, Count_double)),
+%     assertz(count_pemain(Nama, Count_jail, Count_double)),
+%     Count_jail \= 0,
 
-throwDice :-        % Untuk yang dipenjara
-    retract(count_pemain(Nama, Count_jail, Count_double)),
-    assertz(count_pemain(Nama, Count_jail, Count_double)),
-    Count_jail \= 0,
-
-    retract(list_player(ListNama, Giliran)),
-    assertz(list_player(ListNama, Giliran)),
-    getElmtList(ListNama, Giliran, Nama),
-
-    random(1, 7, Dadu_1), 
-    random(1, 7, Dadu_2),
-    % Dadu_1 is 2,
-    % Dadu_2 is 2,
-
-    write('    Dadu 1 : '),write(Dadu_1), nl,
-    write('    Dadu 2 : '), write(Dadu_2),nl, 
+%     retract(list_player(ListNama, Giliran)),
+%     getElmtList(ListNama, Giliran, Nama),
+%     % random(1, 7, Dadu_1), 
+%     % random(1, 7, Dadu_2),
+%     Dadu_1 is 2,
+%     Dadu_2 is 2,
     
-    outFromJail(1, Nama, Dadu_1, Dadu_2),
+%     retract(count_pemain(Nama, Count_jail, Count_double)),
+%     outFromJail(1, Nama, Count_jail, Count_double, New_count_double,New_count_jail),
+%     assertz(count_pemain(Nama, New_count_jail, New_count_double)).
 
-    retract(list_player(ListNama, Giliran)),
-    Giliran_new is ((Giliran) mod 2) + 1,
-    assertz(list_player(ListNama, Giliran_new)),!.
-
-throwDice :-        % Untuk yang ga dipenjara
-    retract(list_player(ListNama, Giliran)),
-    getElmtList(ListNama, Giliran, Nama),
-    random(1, 7, Dadu_1), 
-    random(1, 7, Dadu_2),
-    % Dadu_1 is 2,
-    % Dadu_2 is 2,
+throwDice :- 
     retract(count_pemain(Nama, Count_jail, Count_double)),
     assertz(count_pemain(Nama, Count_jail, Count_double)),
     Count_jail == 0,
 
+    retract(list_player(ListNama, Giliran)),
+    getElmtList(ListNama, Giliran, Nama),
+    % random(1, 7, Dadu_1), 
+    % random(1, 7, Dadu_2),
+    Dadu_1 is 2,
+    Dadu_2 is 2,
+
     retract(count_pemain(Nama, Count_jail, Count_double)),
     checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Giliran, Giliran_new),
     assertz(count_pemain(Nama, Count_jail, Count_doubleNew)),
-    assertz(list_player(ListNama, Giliran_new)),
-    goToJail(Nama, Count_doubleNew).
+    assertz(list_player(ListNama, Giliran_new)),!.
+    % goToJail(Nama, Count_doubleNew).
 
 checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Giliran, Giliran_new) :-
     Dadu_1 =:= Dadu_2, 
     Count_double =:= 2,       % Double masuk penjara
     Count_doubleNew is Count_double + 1,
-    Giliran_new is ((Giliran) mod 2) + 1,!.
-    % write(Count_doubleNew), write(Giliran_new),!.
+    Giliran_new is ((Giliran) mod 2) + 1,
+    write(Count_doubleNew), write(Giliran_new),!.
 
 checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Giliran, Giliran_new) :-
     Dadu_1 =:= Dadu_2, 
@@ -65,7 +58,7 @@ checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Gil
     Count_doubleNew is Count_double + 1,
     Giliran_new is Giliran,
     % write(Count_double), write(Giliran),
-    % write(Count_doubleNew), write(Giliran_new),
+    write(Count_doubleNew), write(Giliran_new),
     write('    Double!\n    Anda dapat mengocok lagi! '),!.
 
 checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Giliran, Giliran_new) :-

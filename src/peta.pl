@@ -1,4 +1,5 @@
 :-dynamic(map/1).
+:-include('player.pl').
 
 startMap(
 /* Bentuk dari map awal*/
@@ -50,6 +51,24 @@ printList([A|T]):-write(A),printList(T).
 displayMap([A]):-printList(A),nl,!.
 displayMap([A|T]):-printList(A),nl,displayMap(T).
 
+displayBoard:-
+    retract(list_player(ListNama, Giliran)),
+    getElmtList(ListNama, 1, Nama1), getElmtList(ListNama, 2, Nama2),
+    retract(lokasi_pemain(Nama1, Lokasi1)),
+    retract(lokasi_pemain(Nama2, Lokasi2)),
+    assertz(lokasi_pemain(Nama1, Lokasi1)),
+    assertz(lokasi_pemain(Nama2, Lokasi2)),
+    getLocation(Lokasi1, NamaLokasi1),
+    getLocation(Lokasi2, NamaLokasi2),
+    retract(map(M)),
+    displayMap(M),
+    assertz(map(M)),
+    write('                 Posisi pemain: '),nl,
+    write('                 '),write(Nama1),write(': '),write(NamaLokasi1),nl,
+    write('                 '),write(Nama2),write(': '),write(NamaLokasi2),nl,nl,
+    getElmtList(ListNama, Giliran, NamaGiliran),
+    write('                 '),write('Sekarang giliran '),write(NamaGiliran),
+    assertz(list_player(ListNama, Giliran)).
 
 getXY(IdxLokasi, X, Y):-
 /* Get index matrix */
@@ -79,4 +98,4 @@ getLocation(IdxLokasi, NamaLokasi):-
 
 
 /* Operation of a Map */
-initMap:-startMap(M),assertz(map(M)),displayMap(M).
+initMap:-startMap(M),assertz(map(M)),displayBoard.
