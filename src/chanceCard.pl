@@ -1,6 +1,6 @@
 addCard(X) :-
     retract(card_pemain(Nama, Daftar_card)),
-    assertz(card_pemain(Nama, [Daftar_card|X])).
+    assertz(card_pemain(Nama, [X|Daftar_card])).
 
 chanceCard :-
     % random generator,
