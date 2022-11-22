@@ -1,10 +1,11 @@
-addCard(X) :-
+addCard(Nama, X) :-
     retract(card_pemain(Nama, Daftar_card)),
     assertz(card_pemain(Nama, [X|Daftar_card])).
 
-chanceCard :-
+chanceCard(Nama) :-
     % random generator,
-    _X is random(),
+    random(1,5,_X),
+    random(5,31,_Y),
     (
     _X =:= 1 -> 
         format('-------------------------------------------------~n', []),
@@ -15,7 +16,7 @@ chanceCard :-
         format('                     $15                         ~n', []),
         format('        ~n', []),
         format('-------------------------------------------------~n', []),
-        addCard('TX')
+        addCard(Nama, 'TX'), % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat 
         ;
     _X =:= 2 -> 
         format('-------------------------------------------------~n', []),
@@ -23,10 +24,10 @@ chanceCard :-
         format('-------------------------------------------------~n', []),
         format('                ~n', []),
         format('                GET MONEY FROM BANK              ~n', []),
-        format('                 $ ~d ~n', [Random]),
+        format('                 $ ~d ~n', [_Y]),
         format('                ~n', []),
         format('-------------------------------------------------~n', []),
-        addCard('GC')
+        addCard(Nama, 'GC')
         ;
     _X =:= 3 -> 
         format('-------------------------------------------------~n', []),
@@ -36,7 +37,7 @@ chanceCard :-
         format('|                  HORAY FREEE                  |~n', []),
         format('|                                               |~n', []),
         format('-------------------------------------------------~n', [])
-        addCard('FJ')
+        addCard(Nama, 'FJ')
         ;
     _X =:= 4 -> 
         format('-------------------------------------------------~n', []),
@@ -46,7 +47,7 @@ chanceCard :-
         format('|            KORUPSINYA KETAUAN GAN             |~n', []),
         format('|                                               |~n', []),
         format('-------------------------------------------------~n', [])
-        addCard('GJ')
+        addCard(Nama, 'GJ'), goToJail(Nama)   % kemudian manggil predicate jail
         ;
             fail
     ).
