@@ -18,7 +18,7 @@ beli(Nama) :-
     Tingkat =:= 2 ->  UangNew is Uang - (Buy0 + Buy1 + Buy2), Nilai_properti_new is Nilai_properti + (Buy0 + Buy1 + Buy2), appendList(Daftar_properti, ID, Daftar_properti_new), asserta(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti_new));
     Tingkat =:= 3 ->  UangNew is Uang - (Buy0 + Buy1 + Buy2 + Buy3), Nilai_properti_new is Nilai_properti +(Buy0 + Buy1 + Buy2 + Buy3), appendList(Daftar_properti, ID, Daftar_properti_new), asserta(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti_new))).
 
-payTax :-
+payTax(Nama) :-
     retract(aset_pemain(Pemilik, Uang, Nilai_properti, Daftar_properti)),
     Tax is 0.1*(Uang + Nilai_properti),
     UangNew is Uang - Tax,

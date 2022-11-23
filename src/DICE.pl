@@ -12,10 +12,10 @@ throwDice :-        % Untuk yang dipenjara
     assertz(list_player(ListNama, Giliran)),
     getElmtList(ListNama, Giliran, Nama),
 
-    random(1, 7, Dadu_1), 
-    random(1, 7, Dadu_2),
-    % Dadu_1 is 2,
-    % Dadu_2 is 2,
+    % random(1, 7, Dadu_1), 
+    % random(1, 7, Dadu_2),
+    Dadu_1 is 2,
+    Dadu_2 is 1,
 
     write('    Dadu 1 : '),write(Dadu_1), nl,
     write('    Dadu 2 : '), write(Dadu_2),nl, 
@@ -29,19 +29,22 @@ throwDice :-        % Untuk yang dipenjara
 throwDice :-        % Untuk yang ga dipenjara
     retract(list_player(ListNama, Giliran)),
     getElmtList(ListNama, Giliran, Nama),
-    random(1, 7, Dadu_1), 
-    random(1, 7, Dadu_2),
-    % Dadu_1 is 2,
-    % Dadu_2 is 2,
+    % random(1, 7, Dadu_1), 
+    % random(1, 7, Dadu_2),
+    Dadu_1 is 2,
+    Dadu_2 is 2,
     retract(count_pemain(Nama, Count_jail, Count_double)),
     assertz(count_pemain(Nama, Count_jail, Count_double)),
     Count_jail == 0,
 
+    % Cek double masuk penjara atau ga
     retract(count_pemain(Nama, Count_jail, Count_double)),
     checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Giliran, Giliran_new),
+
     assertz(count_pemain(Nama, Count_jail, Count_doubleNew)),
     assertz(list_player(ListNama, Giliran_new)),
-    goToJail(Nama, Count_doubleNew).
+    % Cek penjara
+    goToJail(Nama).
 
 checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Giliran, Giliran_new) :-
     Dadu_1 =:= Dadu_2, 
@@ -61,12 +64,13 @@ checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Gil
     retract(lokasi_pemain(Nama, Indeks)),
     IndeksNew is ((Indeks + Dadu - 1) mod 32) + 1,
     assertz(lokasi_pemain(Nama, IndeksNew)),
+    checkLocation(Nama, IndeksNew),
 
     Count_doubleNew is Count_double + 1,
     Giliran_new is Giliran,
     % write(Count_double), write(Giliran),
     % write(Count_doubleNew), write(Giliran_new),
-    write('    Double!\n    Anda dapat mengocok lagi! '),!.
+    write('    Double!\n    Anda dapat mengocok lagi!\n'),!.
 
 checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Giliran, Giliran_new) :-
     Dadu_1 =\= Dadu_2,      % Tidak double
@@ -78,6 +82,7 @@ checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew, Gil
     retract(lokasi_pemain(Nama, Indeks)),
     IndeksNew is ((Indeks + Dadu - 1) mod 32) + 1,
     assertz(lokasi_pemain(Nama, IndeksNew)),
+    checkLocation(Nama, IndeksNew),
 
     Count_doubleNew is 0,
     Giliran_new is ((Giliran) mod 2) + 1,!.

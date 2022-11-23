@@ -97,19 +97,20 @@ getLocation(IdxLokasi, NamaLokasi):-
     getElmtList(['GO', 'A1','A2','A3','CC','B1','B2','B3','JL','C1','C2','C3','TX','D1','D2','D3','FP',
                  'E1','E2','E3','CC','F1','F2','F3','WT','G1','G2','G3','TX','CC','H1','H2'], IdxLokasi, NamaLokasi).
 
-checkLocation(Nama):-
+checkLocation(Nama, Index):-
     % Untuk dapet Chance Card
-    retract(lokasi_pemain(Nama, Index)),
-    assertz(lokasi_pemain(Nama, Index)),
     (Index =:= 5 ; Index =:= 21; Index =:= 30),
+    % write('horray').
     chanceCard(Nama).
 
-checkLocation(Nama):-
+checkLocation(Nama, Index):-
     % Untuk dapet TAX
-    retract(lokasi_pemain(Nama, Index)),
-    assertz(lokasi_pemain(Nama, Index)),
     (Index =:= 13 ; Index =:= 29 ).
     % Masuk ke predicate TAX
+
+checkLocation(Nama, Index):-
+    % Untuk dapet Chance Card
+    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 30.
 
 /* Operation of a Map */
 initMap:-startMap(M),assertz(map(M)),displayBoard.

@@ -7,8 +7,11 @@ goToJail(Nama):-
     assertz(count_pemain(Nama, Count_jail, Count_double)),
     retract(card_pemain(Nama, Kartu)),
     assertz(card_pemain(Nama, Kartu)),
-    (Count_double == 3 ; getIndex(Kartu,'GJ', X)),     % Jika roll dice dapet double sampe 3 kali atau punya kartu jail
-    write('    Kamu masuk penjara karena banyak dosa >:['),
+    (Count_double == 3 ;        % Jika roll dice dapet double sampe 3 kali atau punya kartu jail
+     getIndex(Kartu,'GJ', X) -> remover('GJ', Kartu, KartuNew), 
+                                retract(card_pemain(Nama, Kartu)),
+                                assertz(card_pemain(Nama, KartuNew))),     
+    write('    Kamu masuk penjara karena banyak dosa >:[\n    Tunggu 3 giliran kalo mw keluar'),
     retract(count_pemain(Nama, Count_jail, Count_double)),
     assertz(count_pemain(Nama, 1, 0)),
 
@@ -36,9 +39,10 @@ remover( R, [H|T], [H|T2]) :- H \= R, remover( R, T, T2).
 
 outFromJail(1, Nama, Dadu_1, Dadu_2):-
     retract(count_pemain(Nama, Count_jail, Count_double)),
-    (Dadu_1 =:= Dadu_2 ; Count_jail =:=4),
-    New_count_jail is 0,
-    assertz(count_pemain(Nama, New_count_jail, Count_double)),
+    assertz(count_pemain(Nama, Count_jail, Count_double)),
+    (Dadu_1 =:= Dadu_2 ; Count_jail =:=3),
+    retract(count_pemain(Nama, Count_jail, Count_double)),
+    assertz(count_pemain(Nama, 0, 0)),
     write('    Selamat kamu keluar penjara :>'),nl,
 
     write('    '), write(Nama), Dadu is Dadu_1 + Dadu_2,
@@ -47,17 +51,37 @@ outFromJail(1, Nama, Dadu_1, Dadu_2):-
     IndeksNew is ((Indeks + Dadu - 1) mod 32) + 1,
     assertz(lokasi_pemain(Nama, IndeksNew)),!.
 
-outFromJail(1, Nama, Count_jail, Count_double, New_count_double,New_count_jail):-
+   
+outFromJail(1, Nama, Dadu_1, Dadu_2):-
     retract(count_pemain(Nama, Count_jail, Count_double)),
-    (Dadu_1 \= Dadu_2 ; Count_jail < 4),
+    assertz(count_pemain(Nama, Count_jail, Count_double)),
+    Dadu_1 \= Dadu_2, Count_jail < 3,
     New_count_jail is Count_jail + 1,
-    assertz(count_pemain(Nama, New_count_jail, Count_double)),
-    write('Selamat kamu gagal keluar penjara >:)'),!.
+    retract(count_pemain(Nama, Count_jail, Count_double)),
+    assertz(count_pemain(Nama, New_count_jail, 0)),
+    write('    Selamat kamu gagal keluar penjara >:)\n'),
+    SisaTunggu is 4-New_count_jail,
+    write('    Tunggu '), write(SisaTunggu), write(' giliran kl mw keluar'),!.
+
+card:-
+    retract(count_pemain(Nama, Count_jail, Count_double)),
+    assertz(count_pemain(Nama, Count_jail, Count_double)),
+    ((Count_jail >= 1 -> 
+            retract(list_player(ListNama, Giliran)),
+            getElmtList(ListNama, Giliran, Nama),
+            outFromJail(2, Nama),
+            assertz(list_player(ListNama, Giliran)));
+    (Count_jail == 0 ->
+            write('    Km ga dipenjara pls ngapain mw keluar'))),!.
 
 outFromJail(2, Nama):-
     retract(card_pemain(Nama, Daftar_card)),
-    getIndex(Daftar_card, 'FJ', Idx),
-    remover(Daftar_card, 'FJ', Daftar_card_baru),
+    remover('FJ',Daftar_card, Daftar_card_baru),
+    ((Daftar_card_baru \= Daftar_card -> write('    Selamat kamu keluar penjara jalur langit :>'),
+                                         retract(count_pemain(Nama, Count_jail, Count_double)),
+                                         assertz(count_pemain(Nama, 0, 0)));
+    (Daftar_card_baru == Daftar_card -> assertz(card_pemain(Nama, Daftar_card)),
+                                          write('    Km gk punya kartu Free Jail }:<'))),
     assertz(card_pemain(Nama, Daftar_card_baru)).
     % status jail = false
 
@@ -67,3 +91,10 @@ outFromJail(3, Nama) :-
     Uang_baru is Uang - 1000,
     assertz(aset_pemain(Nama, Uang_baru, Nilai_properti, Daftar_properti)).
     % status jail = false
+
+test(Y, Z) :-
+    remover(Y,Z, X),
+    write(Z),
+    write(X),
+    (Z \= X -> write('satu');
+    Z == X -> write('dua')).
