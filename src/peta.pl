@@ -6,15 +6,15 @@ startMap(
 /* Bentuk dari map awal*/
 [['              ','    ','    ','    ','    ','    ','    ','    ','    ','    ','              '],
  ['    ','    ',' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ','    ','    '],
- ['    ','    ',' |  FP  |  E1  |  E2  |  E3  |  CC  |  F1  |  F2  |  F3  |  WT  | ','    ','    '],
+ ['    ','    ',' |  FP  |  E1  |  E2  |  E3  |  CC2 |  F1  |  F2  |  F3  |  WT  | ','    ','    '],
  ['    ','    ',' |  D3  | - - - - - - - - - - - - - - - - - - - - - - -  |  G1  | ','    ','    '],
  ['    ','    ',' |  D2  |                                                |  G2  | ','    ','    '],
  ['    ','    ',' |  D1  |                                                |  G3  | ','    ','    '],
- ['    ','    ',' |  TX  |                M O N O P O L Y                 |  TX  | ','    ','    '],
- ['    ','    ',' |  C3  |                                                |  CC  | ','    ','    '],
+ ['    ','    ',' |  TX1 |                M O N O P O L Y                 |  TX2 | ','    ','    '],
+ ['    ','    ',' |  C3  |                                                |  CC3 | ','    ','    '],
  ['    ','    ',' |  C2  |                                                |  H1  | ','    ','    '],
  ['    ','    ',' |  C1  | - - - - - - - - - - - - - - - - - - - - - - -  |  H2  | ','    ','    '], 
- ['    ','    ',' |  JL  |  B3  |  B2  |  B1  |  CC  |  A3  |  A2  |  A1  |  GO  | ','    ','    '],
+ ['    ','    ',' |  JL  |  B3  |  B2  |  B1  |  CC1 |  A3  |  A2  |  A1  |  GO  | ','    ','    '],
  ['    ','    ',' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ','    ','    '],
  ['              ','    ','    ','    ','    ','    ','    ','    ','    ','    ','              ']]
 ).
@@ -94,13 +94,21 @@ getXY(IdxLokasi, X, Y):-
 
 getLocation(IdxLokasi, NamaLokasi):-
 /* Menampilkan nama lokasi dari index lokasi */
-    getElmtList(['GO', 'A1','A2','A3','CC','B1','B2','B3','JL','C1','C2','C3','TX','D1','D2','D3','FP',
-                 'E1','E2','E3','CC','F1','F2','F3','WT','G1','G2','G3','TX','CC','H1','H2'], IdxLokasi, NamaLokasi).
+    getElmtList(['GO', 'A1','A2','A3','CC1','B1','B2','B3','JL','C1','C2','C3','TX1','D1','D2','D3','FP',
+                 'E1','E2','E3','CC2','F1','F2','F3','WT','G1','G2','G3','TX2','CC3','H1','H2'], IdxLokasi, NamaLokasi).
+
+getIndexOf([Val|_], Val, 1):- !.
+getIndexOf([_|T], Val, Index):-
+  getIndexOf(T, Val, Index1),!,
+  Index is Index1+1.
+
+getMapIndex(NamaLokasi, IdxLokasi):-
+    getIndexOf(['GO', 'A1','A2','A3','CC1','B1','B2','B3','JL','C1','C2','C3','TX1','D1','D2','D3','FP',
+                'E1','E2','E3','CC2','F1','F2','F3','WT','G1','G2','G3','TX2','CC3','H1','H2'], NamaLokasi, IdxLokasi).
 
 checkLocation(Nama, Index):-
     % Untuk dapet Chance Card
     (Index =:= 5 ; Index =:= 21; Index =:= 30),
-    % write('horray').
     chanceCard(Nama).
 
 checkLocation(Nama, Index):-

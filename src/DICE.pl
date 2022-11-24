@@ -1,6 +1,6 @@
-:- include('player.pl').
-:- include('peta.pl').
-:- include('jail.pl').
+% :- include('player.pl').
+% :- include('peta.pl').
+% :- include('jail.pl').
 
 
 throwDice :-        % Untuk yang dipenjara

@@ -42,18 +42,18 @@ initPlayer :-
 /* Display detail informasi pemain */
 checkPlayerDetail(Nama) :-
     pemain(Nama, Indeks, Uang, Nilai_properti, Daftar_properti, Daftar_card, Count_jail, Count_double),
-    write('Informasi Player '), write(Nama), nl,
-    nl,
-    write('Lokasi                       : '), write('Lokasi'), nl, % Lokasi added later 
-    write('Total Uang                   : '), write(Uang), nl,
-    write('Total Nilai Properti         : '), write(Nilai_properti), nl,
+    getLocation(Indeks, NamaLokasi),
+    write('    Informasi Player '), write(Nama), nl,nl,
+    write('    Lokasi                       : '), write(NamaLokasi), nl, 
+    write('    Total Uang                   : '), write(Uang), nl,
+    write('    Total Nilai Properti         : '), write(Nilai_properti), nl,
     Aset is Uang + Nilai_properti,
-    write('Total Aset                   : '), write(Aset), nl,
+    write('    Total Aset                   : '), write(Aset), nl,
     nl,
-    write('Daftar Kepemilikan Properti  : '), nl,
+    write('    Daftar Kepemilikan Properti  : '), nl,
     displayProperty(Daftar_properti, 1), nl,
     nl,
-    write('Daftar Kepemilikan Card      : '), nl,
+    write('    Daftar Kepemilikan Card      : '), nl,
     displayCard(Daftar_card, 1), !.
 
 /* Display properti pemain */

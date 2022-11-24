@@ -1,5 +1,12 @@
-:-include('player.pl').
-:-include('buynupgrade.pl').
+% :-include('player.pl').
+% :-include('buynupgrade.pl').
+
+moveToTax(Nama):-
+    retract(lokasi_pemain(Nama, IndexLoc)),
+    (((IndexLoc == 5) -> IndexNew is 13);
+    ((IndexLoc == 30) -> IndexNew is 13);
+    ((IndexLoc == 21 -> IndexNew is 29))),
+    assertz(lokasi_pemain(Nama, IndexNew)).
 
 addCard(Nama, X) :-
     retract(card_pemain(Nama, Daftar_card)),
@@ -14,14 +21,16 @@ chanceCard(Nama) :-
     
     ((_X == 1 -> 
         payTax(Nama, Tax),
+        moveToTax(Nama),
         write('    -------------------------------------------------'),nl,
         write('    |                  TAX CARD                     |'),nl,
         write('    -------------------------------------------------'),nl,
         write('    |                                               |'),nl,
         write('    |                 PAY TAX OF                    |'),nl,
-        write('    |                   '),write(Tax),nl,
+        write('                        '),write(Tax),nl,
         write('    |                                               |'),nl,
-        write('    -------------------------------------------------'),nl) % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat
+        write('    -------------------------------------------------'),nl,
+        write('    Anda dipindahkan ke lokasi TAX terdekat >_o\n')) % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat
         ;
     (_X == 2 -> 
         write('    -------------------------------------------------'),nl,

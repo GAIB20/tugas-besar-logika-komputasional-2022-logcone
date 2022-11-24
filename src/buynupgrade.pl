@@ -1,4 +1,4 @@
-:- include('player.pl').
+% :- include('player.pl').
 % :- include('properti.pl').
 
 % beli(Nama) :-
@@ -22,17 +22,17 @@ payTax(Nama, Tax) :-
     retract(aset_pemain(Pemilik, Uang, Nilai_properti, Daftar_properti)),
     Tax is 0.1*(Uang + Nilai_properti),
     UangNew is Uang - Tax,
-    % (UangNew < 0 -> jual aset ),
     asserta(aset_pemain(Pemilik, UangNew, Nilai_properti, Daftar_properti)).
 
 % worldTour(Pemain) :-
-%     wirte('Pilih nama lokasi yang ingin kamu kunjungi : '),
+%     write('    Pilih nama lokasi yang ingin kamu kunjungi'),nl,
+%     write('    Format penulisan sesuai map dengan tanda kutip. Contoh:  \'A1\'\n    Masukkan nama lokasi: '),
 %     read(LocName),
-%     retract(property(ID, LocName, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-%     assertz(property(ID, LocName, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-%     (Indeks \== 25 -> retract(lokasi_pemain(Pemain, Indexold)), assertz(lokasi_pemain(Pemain, Indeks)),write('Anda sudah sampai di lokasi tujuan'), nl,
-%         (Indeks < 25 -> retractz(aset_pemain(Pemain, Uang, Nilai_properti, Daftar_properti)),UangNew is Uang + 10000,assertz(aset_pemain(Pemain, UangNew, Nilai_properti, Daftar_properti)),write('Anda mendapat uang sebanyak 10000'), nl);
-%     Indeks =:= 25 -> write('Anda tidak boleh menuju ke world tour'), nl, worldTour(Pemain)).
+%     getMapIndex(LocName, Index),
+%     ((Indeks \= 25 -> retract(lokasi_pemain(Pemain, Indexold)), 
+%                       assertz(lokasi_pemain(Pemain, Index)),
+%                       write('    Anda sudah sampai di lokasi tujuan'),nl,);
+%     (Indeks == 25 -> write('Anda tidak boleh menuju ke world tour'), nl, worldTour(Pemain))).
     
 
 % upgrade :-
