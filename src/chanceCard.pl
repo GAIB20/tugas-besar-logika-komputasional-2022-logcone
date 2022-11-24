@@ -17,7 +17,7 @@ chanceCard(Nama) :-
     % random(1,5,_X),
     % write('hooray'),
     random(20,150,_Y),
-    _X is 1,
+    _X is 2,
     
     ((_X == 1 -> 
         payTax(Nama, Tax),
@@ -30,7 +30,7 @@ chanceCard(Nama) :-
         write('                        '),write(Tax),nl,
         write('    |                                               |'),nl,
         write('    -------------------------------------------------'),nl,
-        write('    Anda dipindahkan ke lokasi TAX terdekat >_o\n')) % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat
+        write('    Anda dipindahkan ke lokasi TAX terdekat >_o')) % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat
         ;
     (_X == 2 -> 
         write('    -------------------------------------------------'),nl,

@@ -18,6 +18,16 @@ goToJail(Nama):-
     retract(lokasi_pemain(Nama, Lokasi)), 
     assertz(lokasi_pemain(Nama, 9)),!.     % lokasi index dari penjara adalah 9
 
+goToJail(Nama):-
+% Predicate untuk masuk penjara
+    retract(count_pemain(Nama, Count_jail, Count_double)),
+    assertz(count_pemain(Nama, Count_jail, Count_double)),
+    retract(card_pemain(Nama, Kartu)),
+    assertz(card_pemain(Nama, Kartu)),
+    remover('GJ', Kartu, KartuNew),
+    Count_double \= 3, KartuNew == Kartu.
+    
+
 /*
     Metode untuk keluar dari penjara
     1. Roll

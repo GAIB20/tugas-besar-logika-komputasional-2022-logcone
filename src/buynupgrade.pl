@@ -24,15 +24,17 @@ payTax(Nama, Tax) :-
     UangNew is Uang - Tax,
     asserta(aset_pemain(Pemilik, UangNew, Nilai_properti, Daftar_properti)).
 
-% worldTour(Pemain) :-
-%     write('    Pilih nama lokasi yang ingin kamu kunjungi'),nl,
-%     write('    Format penulisan sesuai map dengan tanda kutip. Contoh:  \'A1\'\n    Masukkan nama lokasi: '),
-%     read(LocName),
-%     getMapIndex(LocName, Index),
-%     ((Indeks \= 25 -> retract(lokasi_pemain(Pemain, Indexold)), 
-%                       assertz(lokasi_pemain(Pemain, Index)),
-%                       write('    Anda sudah sampai di lokasi tujuan'),nl,);
-%     (Indeks == 25 -> write('Anda tidak boleh menuju ke world tour'), nl, worldTour(Pemain))).
+worldTour(Pemain) :-
+    write('    Pilih nama lokasi yang ingin kamu kunjungi'),nl,
+    write('    Format penulisan sesuai map dengan tanda kutip. Contoh:  \'A1\'\n    Masukkan nama lokasi: '),
+    read(LocName),
+    % write(LocName),
+    getMapIndex(LocName, Index),
+    write(Index),
+    ((Index \= 25 ->  retract(lokasi_pemain(Pemain, Indexold)), 
+                      assertz(lokasi_pemain(Pemain, Index)),
+                      write('    Anda sudah sampai di lokasi tujuan'),nl);
+    (Index == 25 -> write('     Anda tidak boleh menuju ke world tour lagiiii nakal bgt'), nl, worldTour(Pemain))).
     
 
 % upgrade :-

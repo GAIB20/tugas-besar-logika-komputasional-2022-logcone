@@ -108,17 +108,16 @@ getMapIndex(NamaLokasi, IdxLokasi):-
 
 checkLocation(Nama, Index):-
     % Untuk dapet Chance Card
-    (Index =:= 5 ; Index =:= 21; Index =:= 30),
-    chanceCard(Nama).
+    (
+        ((Index =:= 5 ; Index =:= 21; Index =:= 30) -> chanceCard(Nama));
+        ((Index =:= 13 ; Index =:= 29 ) -> payTax(Nama, Tax),
+                                        write('    Ninu ninu km kena pajaaakkk sebesar '), 
+                                        write(Tax));
+        ((Index =:= 25) -> worldTour(Pemain))
+    ).
 
 checkLocation(Nama, Index):-
-    % Untuk dapet TAX
-    (Index =:= 13 ; Index =:= 29 ).
-    % Masuk ke predicate TAX
-
-checkLocation(Nama, Index):-
-    % Untuk dapet Chance Card
-    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 30.
+    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 25, Index \= 30.
 
 /* Operation of a Map */
 initMap:-startMap(M),assertz(map(M)),displayBoard.
