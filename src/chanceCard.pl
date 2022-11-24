@@ -1,4 +1,5 @@
 :-include('player.pl').
+:-include('buynupgrade.pl').
 
 addCard(Nama, X) :-
     retract(card_pemain(Nama, Daftar_card)),
@@ -8,19 +9,19 @@ chanceCard(Nama) :-
     % random generator,
     % random(1,5,_X),
     % write('hooray'),
-    random(5,31,_Y),
-    _X is 4,
+    random(20,150,_Y),
+    _X is 1,
     
     ((_X == 1 -> 
+        payTax(Nama, Tax),
         write('    -------------------------------------------------'),nl,
         write('    |                  TAX CARD                     |'),nl,
         write('    -------------------------------------------------'),nl,
         write('    |                                               |'),nl,
         write('    |                 PAY TAX OF                    |'),nl,
-        write('    |                    bla                        |'),nl,
+        write('    |                   '),write(Tax),nl,
         write('    |                                               |'),nl,
-        write('    -------------------------------------------------'),nl,
-        payTax(Nama)) % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat
+        write('    -------------------------------------------------'),nl) % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat
         ;
     (_X == 2 -> 
         write('    -------------------------------------------------'),nl,
@@ -28,10 +29,12 @@ chanceCard(Nama) :-
         write('    -------------------------------------------------'),nl,
         write('    |                                               |'),nl,
         write('    |             GET MONEY FROM BANK               |'),nl,
-        write('    |                     bla                       |'),nl,
+        write('                         '),write(_Y),nl,
         write('    |                                               |'),nl,
         write('    -------------------------------------------------'),nl,
-        addCard(Nama, 'GC'))
+        retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
+        UangNew is Uang + _Y,
+        assertz(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti)))
         ;
     (_X == 3 -> 
         write('    -------------------------------------------------'),nl,
