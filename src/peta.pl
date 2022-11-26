@@ -1,6 +1,7 @@
 :-dynamic(map/1).
 :-include('player.pl').
 :-include('chanceCard.pl').
+:-include('properti.pl').
 
 startMap(
 /* Bentuk dari map awal*/
@@ -118,6 +119,22 @@ checkLocation(Nama, Index):-
 
 checkLocation(Nama, Index):-
     Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 25, Index \= 30.
+
+checkLocationDetail(ID) :-
+    retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok))
+    write('Nama Lokasi          : '), write(Nama_properti),nl,
+    write('Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
+    kepemilikan(Pemilik, ID),
+    write('Kepemilikan          : '), write(Pemilik), nl,
+    write('Biaya sewa saat ini  : '), write(Rent),nl,
+    write('Biaya Akuisis        : '), write(Akuisisi), nl,
+    write('Tingkatan properti   : '), 
+    ((Tipe =:= 1 -> write('Bangunan 1'), nl),
+    (Tipe =:= 2 -> write('Bangunan 2'), nl),
+    (Tipe =:= 3 -> write('Bangunan 3'), nl),
+    (Tipe =:= 4 -> write('Landmark'), nl)).
+    
 
 /* Operation of a Map */
 initMap:-startMap(M),assertz(map(M)),displayBoard.
