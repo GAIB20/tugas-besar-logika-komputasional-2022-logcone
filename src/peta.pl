@@ -122,7 +122,7 @@ checkLocation(Nama, Index):-
 
 checkLocationDetail(ID) :-
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-    asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok))
+    asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     write('Nama Lokasi          : '), write(Nama_properti),nl,
     write('Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
     kepemilikan(Pemilik, ID),
@@ -138,3 +138,7 @@ checkLocationDetail(ID) :-
 
 /* Operation of a Map */
 initMap:-startMap(M),assertz(map(M)),displayBoard.
+
+
+    
+    
