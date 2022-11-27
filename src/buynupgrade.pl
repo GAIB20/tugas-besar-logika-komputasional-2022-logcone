@@ -7,17 +7,16 @@ buy :-
     retract(lokasi_pemain(Nama, Indeks)),
     asserta(lokasi_pemain(Nama, Indeks)),
    
-    retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     propertyValue(ID, Buy0, Buy1, Buy2, Buy3, Buy4, Rent0, Rent1, Rent2, Rent3, Rent4),
-   
     kepemilikan(Pemilik, ID),
+    retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
     write(Pemilik),
     
     (
-    (Pemilik == 'None' -> (
-                          write('    Ingin bangun sampai tingkat berapa? (0/1/2/3): '), nl,
+    (Pemilik == 'None' -> write('    Ingin bangun sampai tingkat berapa? (0/1/2/3): '), nl,
                           read(Tingkat),
+                          (
                           (Tingkat == 0 -> HargaBuy is Buy0, 
                                             RentNew is Rent0);
                           (Tingkat == 1 -> HargaBuy is Buy0 + Buy1, 
@@ -31,7 +30,7 @@ buy :-
                           (
                           (UangNew < 0 -> write('    Km gpunya uang yg cukup'), 
                                          asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-                                         asserta(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti)));
+                                         asserta(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti))), !;
 
                           (UangNew >= 0 -> Nilai_properti_new is Nilai_properti + HargaBuy, 
                                           appendList(Daftar_properti, ID, Daftar_properti_new),
@@ -44,20 +43,22 @@ buy :-
     (Pemilik == Nama -> write('    \nBangunan ini dah jadi punya u, ketik upgrade kalo mau upgrade y brow'));
 
     % ((Pemilik == 'satu') -> write('satu'))
-    ((Pemilik =\= 'None', Pemilik =\= nama) -> UangNew is Uang - Akuisisi,
-                                             UangNew < 0 -> write('    Km gpunya uang yg cukup'),
-                                             asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-                                             asserta(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti));                                            
+    ((Pemilik \== 'None', Pemilik \== Nama) -> UangNew is Uang - Akuisisi,
+                                                (
+                                                (UangNew < 0 ->  write('    Km gpunya uang yg cukup'),
+                                                                asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+                                                                asserta(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti))), !;                                            
 
-                                            UangNew >= 0 -> appendList(Daftar_properti, ID, Daftar_properti_new),
-                                                            asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-                                                            asserta(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti_new)),
+                                                (UangNew >= 0 -> appendList(Daftar_properti, ID, Daftar_properti_new),
+                                                                asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+                                                                asserta(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti_new)),
                                                             
-                                                            GiliranNew is (Giliran mod 2) + 1, 
-                                                            getElmtList(ListNama, GiliranNew, NamaPemilik),
-                                                            retract(aset_pemain(NamaPemilikOld, Uang, Nilai_properti, Daftar_properti_old)),
-                                                            remover(ID, Daftar_properti_old, Daftar_properti_new2),
-                                                            asserta(aset_pemain(NamaPemilikOld, Uang, Nilai_properti, Daftar_properti_new2))
+                                                                GiliranNew is (Giliran mod 2) + 1, 
+                                                                getElmtList(ListNama, GiliranNew, NamaPemilikOld),
+                                                                retract(aset_pemain(NamaPemilikOld, UangOld, Nilai_properti_old, Daftar_properti_old)),
+                                                                remover(ID, Daftar_properti_old, Daftar_properti_new2),
+                                                                asserta(aset_pemain(NamaPemilikOld, UangOld, Nilai_properti, Daftar_properti_new2))), !
+                                                )
                                                             
         )
                                                             
