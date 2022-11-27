@@ -130,9 +130,10 @@ checkLocationDetail(ID) :-
     write('Biaya sewa saat ini  : '), write(Rent),nl,
     write('Biaya Akuisis        : '), write(Akuisisi), nl,
     write('Tingkatan properti   : '), 
-    ((Tipe =:= 1 -> write('Bangunan 1'), nl),
-    (Tipe =:= 2 -> write('Bangunan 2'), nl),
-    (Tipe =:= 3 -> write('Bangunan 3'), nl),
+    ((Tipe =:= 0 -> write('Tanah'), nl);
+    (Tipe =:= 1 -> write('Bangunan 1'), nl);
+    (Tipe =:= 2 -> write('Bangunan 2'), nl);
+    (Tipe =:= 3 -> write('Bangunan 3'), nl);
     (Tipe =:= 4 -> write('Landmark'), nl)).
     
 
