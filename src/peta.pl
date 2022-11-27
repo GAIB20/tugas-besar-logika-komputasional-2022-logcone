@@ -114,7 +114,7 @@ checkLocation(Nama, Index):-
         ((Index =:= 13 ; Index =:= 29 ) -> payTax(Nama, Tax),
                                         write('    Ninu ninu km kena pajaaakkk sebesar '), 
                                         write(Tax));
-        ((Index =:= 25) -> worldTour(Pemain))
+        ((Index =:= 25) -> worldTour(Nama))
     ).
 
 checkLocation(Nama, Index):-
