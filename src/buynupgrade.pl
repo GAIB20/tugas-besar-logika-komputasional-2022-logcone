@@ -48,8 +48,8 @@ buy :-
                 (UangNew < 0 -> 
                     write('\nKm gpunya uang yg cukup\n'), 
                     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-                    assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti))
-                ), !;
+                    assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)), !, fail
+                );
 
                 (UangNew >= 0 ->
                     Nilai_properti_new is Nilai_properti + HargaBuy, 
@@ -65,7 +65,7 @@ buy :-
         (Pemilik == Nama -> 
             write('\nBangunan ini dah jadi punya u, ketik upgrade kalo mau upgrade y brow\n'),
             assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-            assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti))
+            assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)), !, fail
         );
 
         ((Pemilik \== 'None', Pemilik \== Nama) -> UangNew is Uang - Akuisisi,
@@ -75,7 +75,7 @@ buy :-
                             (UangNew < 0 ->  
                                 write('\nKm gpunya uang yg cukup\n'),
                                 assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-                                assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti))
+                                assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)), !, fail
                             );                                            
 
                             (UangNew >= 0 -> 
@@ -127,10 +127,24 @@ worldTour(Pemain) :-
     
 
 upgrade :-
+    retract(list_player(ListNama, Giliran)),
+    assertz(list_player(ListNama, Giliran)),
+    getElmtList(ListNama, Giliran, Nama),
+
     retract(lokasi_pemain(Nama, Indeks)),
     assertz(lokasi_pemain(Nama, Indeks)),
 
+    checkProperty(Indeks),
 
+    kepemilikan(Pemilik, ID),
+
+    (
+        Pemilik == Nama,
+        true;
+        write('Kamu tidak bisa upgrade sesuatu yang bukan punyamu! >:(\n'),
+        !, fail
+    ),
+    
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
 
