@@ -153,3 +153,5 @@ payRent(NamaPemain, Indeks):-
 % sellProperty(NamaPemain):-
 %     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
 %     displayProperty
+% deskripsiProperti(ID_Properti, Nama_properti, Indeks, Deskripsi_properti).
+% propertyValue(ID, Buy0, Buy1, Buy2, Buy3, Buy4, Rent0, Rent1, Rent2, Rent3, Rent4).
