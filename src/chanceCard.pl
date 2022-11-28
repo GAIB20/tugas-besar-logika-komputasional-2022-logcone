@@ -20,10 +20,10 @@ addCard(Nama, X) :-
 
 chanceCard(Nama) :-
     % random generator,
-    % random(1,6,_X),
+    random(1,6,_X),
     % write('hooray'),
     random(20,150,_Y),
-    _X is 5,
+    % _X is 5,
     
     ((_X == 1 -> 
         payTax(Nama, Tax),
