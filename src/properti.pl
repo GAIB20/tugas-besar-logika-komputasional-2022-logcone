@@ -98,18 +98,18 @@ checkPropertyDetail(ID) :-
     % X is 0 + Buy0,
 
     % write(Buy0),
-    write('Nama Properti: '),write(Nama_properti),nl,
-    write('Deskripsi Properti: '),write(Deskripsi_properti),nl,nl,
-    write('Harga Tanah: '),write(Buy0),nl,
-    write('Harga Bangunan 1: '),write(Buy1),nl,
-    write('Harga Bangunan 2: '),write(Buy2),nl,
-    write('Harga Bangunan 3: '),write(Buy3),nl,
-    write('Harga Landmark: '),write(Buy4),nl,nl,
-    write('Biaya Sewa Tanah: '),write(Rent0),nl,
-    write('Biaya Sewa Bangunan 1: '),write(Rent1),nl,
-    write('Biaya Sewa Bangunan 2: '),write(Rent2),nl,
-    write('Biaya Sewa Bangunan 3: '),write(Rent3),nl,
-    write('Biaya Sewa Landmark: '),write(Rent4),nl,nl,!.
+    write('Nama Properti         : '),write(Nama_properti),nl,
+    write('Deskripsi Properti    : '),write(Deskripsi_properti),nl,nl,
+    write('Harga Tanah           : '),write(Buy0),nl,
+    write('Harga Bangunan 1      : '),write(Buy1),nl,
+    write('Harga Bangunan 2      : '),write(Buy2),nl,
+    write('Harga Bangunan 3      : '),write(Buy3),nl,
+    write('Harga Landmark        : '),write(Buy4),nl,nl,
+    write('Biaya Sewa Tanah      : '),write(Rent0),nl,
+    write('Biaya Sewa Bangunan 1 : '),write(Rent1),nl,
+    write('Biaya Sewa Bangunan 2 : '),write(Rent2),nl,
+    write('Biaya Sewa Bangunan 3 : '),write(Rent3),nl,
+    write('Biaya Sewa Landmark   : '),write(Rent4),nl,nl,!.
     
 
 
@@ -124,7 +124,7 @@ payRent(NamaPemain, Indeks):-
         kepemilikan(NamaPemilik, ID_Properti),
         (NamaPemilik == NamaPemain);
         (NamaPemilik \== NamaPemain) -> (
-            write('    Kamu numpang di wilayah lawan, harus bayar rent yaaaaa sebesar '), write(Rent),
+            write('    Kamu numpang di wilayah lawan, harus bayar rent yaaaaa sebesar '), write(Rent),nl,
             retract(aset_pemain(NamaPemain, UangPemain, Nilai_properti_Pemain, Daftar_properti_Pemain)),
             
             UangPemainNew is UangPemain - Rent,
