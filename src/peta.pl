@@ -130,7 +130,7 @@ checkLocationDetail(ID) :-
     kepemilikan(Pemilik, ID),
     write('    Kepemilikan          : '), write(Pemilik), nl,
     write('    Biaya sewa saat ini  : '), write(Rent),nl,
-    write('    Biaya Akuisisi        : '), write(Akuisisi), nl,
+    write('    Biaya Akuisisi       : '), write(Akuisisi), nl,
     write('    Tingkatan properti   : '),
     writeTingkatan(Tipe).
     
