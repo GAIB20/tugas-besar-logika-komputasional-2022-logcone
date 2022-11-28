@@ -50,10 +50,10 @@ initProperty:-
     propertyValue('H2',120,137,271,543,611,80,91,181,271,271).
 
 
-property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok). %contoh Tipe: bangunan 1, tanah, dst.
+% property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok). %contoh Tipe: bangunan 1, tanah, dst.
 
 /*Rules*/
-kepemilikan(P1, Milik):-
+kepemilikan(P1, ID):-
     retract(list_player([P1, P2], Giliran)),
     assertz(list_player([P1, P2], Giliran)),
     retract(aset_pemain(P1, Uang1, Nilai_properti1, Daftar_properti1)),
@@ -61,7 +61,7 @@ kepemilikan(P1, Milik):-
     remover(ID, Daftar_properti1, Daftar_properti1_New),
     Daftar_properti1 \= Daftar_properti1_New,!.
 
-kepemilikan(P2, Milik):-
+kepemilikan(P2, ID):-
     retract(list_player([P1, P2], Giliran)),
     assertz(list_player([P1, P2], Giliran)),
     retract(aset_pemain(P2, Uang2, Nilai_properti2, Daftar_properti2)),
@@ -69,7 +69,7 @@ kepemilikan(P2, Milik):-
     remover(ID, Daftar_properti2, Daftar_properti2_New),
     Daftar_properti2 \= Daftar_properti2_New,!.
 
-kepemilikan('None', Milik):-
+kepemilikan('None', ID):-
     retract(list_player([P1, P2], Giliran)),
     assertz(list_player([P1, P2], Giliran)),
     retract(aset_pemain(P1, Uang1, Nilai_properti1, Daftar_properti1)),
@@ -93,6 +93,10 @@ checkPropertyDetail(ID) :-
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     propertyValue(ID, Buy0, Buy1, Buy2, Buy3, Buy4, Rent0, Rent1, Rent2, Rent3, Rent4),
+    % (propertyValue(ID, Buy0, Buy1, Buy2, Buy3, Buy4, Rent0, Rent1, Rent2, Rent3, Rent4)),
+    % X is 0 + Buy0,
+
+    write(Buy0),
     write('Nama Properti: '),write(Nama_properti),nl,
     write('Deskripsi Properti: '),write(Deskripsi_properti),nl,nl,
     write('Harga Tanah: '),write(Buy0),nl,
@@ -104,15 +108,33 @@ checkPropertyDetail(ID) :-
     write('Biaya Sewa Bangunan 1: '),write(Rent1),nl,
     write('Biaya Sewa Bangunan 2: '),write(Rent2),nl,
     write('Biaya Sewa Bangunan 3: '),write(Rent3),nl,
-    write('Biaya Sewa Landmark: '),write(Rent4),nl,nl.
+    write('Biaya Sewa Landmark: '),write(Rent4),nl,nl,!.
     
 
 
-payRent(Pemilik, ID_Properti):-
-    retract(aset_pemain(Pemilik, Uang, Nilai_properti, Daftar_properti)),
-    retract(property(ID_Properti, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-    NewMoney is Uang - Rent,
-    asserta(property(ID_Properti, Nama_properti, Indeks, Deskripsi_properti, Tipe, NewMoney, Akuisisi, Blok)).
+payRent(NamaPemain, ID_Properti):-
+
+    retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+
+    ((Tipe == -1);
+    (Tipe \== -1) -> (
+        kepemilikan(NamaPemilik, ID_Properti),
+        (NamaPemilik == NamaPemain);
+        (NamaPemilik \== NamaPemain) -> (
+            retract(aset_pemain(NamaPemain, UangPemain, Nilai_properti_Pemain, Daftar_properti_Pemain)),
+            UangPemainNew is UangPemain - Rent,
+            % nnti ditambahin kondisi ketika uang < 0 (mekanisme bangkrut)
+            assertz(aset_pemain(NamaPemain, UangPemainNew, Nilai_properti_Pemain, Daftar_properti_Pemain)),
+            
+            retract(aset_pemain(NamaPemilik, UangPemilik, Nilai_properti_Pemilik, Daftar_properti_Pemilik)),
+            UangPemilikNew is UangPemilik + rent,
+            retract(aset_pemain(NamaPemilik, UangPemilikNew, Nilai_properti_Pemilik, Daftar_properti_Pemilik))        
+        )
+    )).
+
+    
+
 
 payAkuisisi(Pemilik, ID_Properti):-
     aset_pemain(Pemilik, Uang, Nilai_properti, Daftar_properti),
@@ -120,7 +142,9 @@ payAkuisisi(Pemilik, ID_Properti):-
     NewMoney is Uang - Akuisisi,
     asserta(property(ID_Properti, Nama_properti, Indeks, Deskripsi_properti, Tipe, NewMoney, Akuisisi, Blok)).
 
-deskripsiProperti(ID_Properti, Nama_properti, Indeks, Deskripsi_properti).
-propertyValue(ID, Buy0, Buy1, Buy2, Buy3, Buy4, Rent0, Rent1, Rent2, Rent3, Rent4).
+% deskripsiProperti(ID_Properti, Nama_properti, Indeks, Deskripsi_properti).
+% propertyValue(ID, Buy0, Buy1, Buy2, Buy3, Buy4, Rent0, Rent1, Rent2, Rent3, Rent4).
 
 
+
+% propertyValue('A1',15,37,75,150,168,10,25,50,75,75).

@@ -12,6 +12,7 @@ buy :-
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
     % write(Pemilik),
+    write(Buy0),
     
     (
         (Pemilik == 'None' -> 
