@@ -25,10 +25,8 @@ buy :-
     
     (
         (Pemilik == 'None' -> 
-            write('    Ingin bangun sampai tingkat berapa? (0/1/2/3): '),  
+            write('\nIngin bangun sampai tingkat berapa? (0/1/2/3): \n'),  
             read(Tingkat),
-            % write(atomic(Tipe)),
-            % write(atomic(Tingkat)),
             (
                 (Tingkat == 0 -> HargaBuy is Buy0, 
                                 RentNew is Rent0);
@@ -56,8 +54,7 @@ buy :-
                     appendList(Daftar_properti, ID, Daftar_properti_new),
                     AkuisisiNew is Nilai_properti_new*2,
                     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tingkat, RentNew, AkuisisiNew, Blok)),
-                    assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti_new)),
-                    write('    Km berhasil beli bangunan ini yey :>')
+                    assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti_new))
                 ), !
             )
         );
@@ -91,6 +88,11 @@ buy :-
                                 remover(ID, Daftar_properti_old, Daftar_properti_new2),
                                 Nilai_properti_updated is Nilai_properti_old - div(Akuisisi, 2),
                                 assertz(aset_pemain(NamaPemilikOld, UangOld, Nilai_properti_updated, Daftar_properti_new2))
+
+                                % getXY(Indeks, X, Y),
+                                % retract(map(M)),
+                                % ((Tipe =!= 0 -> ))
+                                % setElmtMap(M, X, Y, )
                             )
                         )     
                     );
