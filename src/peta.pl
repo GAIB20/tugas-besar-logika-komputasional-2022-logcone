@@ -1,7 +1,7 @@
 :-dynamic(map/1).
-:-include('player.pl').
-:-include('chanceCard.pl').
-:-include('properti.pl').
+% :-include('player.pl').
+% :-include('chanceCard.pl').
+% :-include('properti.pl').
 
 startMap(
 /* Bentuk dari map awal*/
@@ -104,6 +104,7 @@ getIndexOf([_|T], Val, Index):-
   Index is Index1+1.
 
 getMapIndex(NamaLokasi, IdxLokasi):-
+/* Menampilkan index lokasi dari nama lokasi*/
     getIndexOf(['GO', 'A1','A2','A3','CC1','B1','B2','B3','JL','C1','C2','C3','TX1','D1','D2','D3','FP',
                 'E1','E2','E3','CC2','F1','F2','F3','WT','G1','G2','G3','TX2','CC3','H1','H2'], NamaLokasi, IdxLokasi).
 
@@ -122,20 +123,23 @@ checkLocation(Nama, Index):-
 
 checkLocationDetail(ID) :-
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-    asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-    write('Nama Lokasi          : '), write(Nama_properti),nl,
-    write('Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
+    assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    write('    Nama Lokasi          : '), write(Nama_properti),nl,
+    write('    Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
     kepemilikan(Pemilik, ID),
-    write('Kepemilikan          : '), write(Pemilik), nl,
-    write('Biaya sewa saat ini  : '), write(Rent),nl,
-    write('Biaya Akuisis        : '), write(Akuisisi), nl,
-    write('Tingkatan properti   : '), 
-    ((Tipe =:= 0 -> write('Tanah'), nl);
-    (Tipe =:= 1 -> write('Bangunan 1'), nl);
-    (Tipe =:= 2 -> write('Bangunan 2'), nl);
-    (Tipe =:= 3 -> write('Bangunan 3'), nl);
-    (Tipe =:= 4 -> write('Landmark'), nl)).
+    write('    Kepemilikan          : '), write(Pemilik), nl,
+    write('    Biaya sewa saat ini  : '), write(Rent),nl,
+    write('    Biaya Akuisisi        : '), write(Akuisisi), nl,
+    write('    Tingkatan properti   : '),
+    writeTingkatan(Tipe).
     
+writeTingkatan(Tingkat):-
+    (Tingkat == 0; Tingkat == -1) -> write('Tanah');
+    (Tingkat == 1 -> write('Bangunan 1'), nl);
+    (Tingkat == 2 -> write('Bangunan 2'), nl);
+    (Tingkat == 3 -> write('Bangunan 3'), nl);
+    (Tingkat == 4 -> write('Landmark'), nl),!.
+
 
 /* Operation of a Map */
 initMap:-startMap(M),assertz(map(M)),displayBoard.
