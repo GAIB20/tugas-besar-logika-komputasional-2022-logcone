@@ -111,20 +111,20 @@ checkPropertyDetail(ID) :-
     write('Biaya Sewa Bangunan 3 : '),write(Rent3),nl,
     write('Biaya Sewa Landmark   : '),write(Rent4),nl,nl,!.
     
-checkRent(Indeks) :-
-    Indeks =\= 5,
-    Indeks =\= 9,
-    Indeks =\= 13,
-    Indeks =\= 17,
-    Indeks =\= 21,
-    Indeks =\= 25,
-    Indeks =\= 29,
-    Indeks =\= 30.
+% checkRent(Indeks) :-
+%     Indeks =\= 5,
+%     Indeks =\= 9,
+%     Indeks =\= 13,
+%     Indeks =\= 17,
+%     Indeks =\= 21,
+%     Indeks =\= 25,
+%     Indeks =\= 29,
+%     Indeks =\= 30.
 
-payRent(NamaPemain, Indeks).
+% payRent(NamaPemain, Indeks).
 payRent(NamaPemain, Indeks):-
     % getLocation(Indeks, )
-    checkRent(Index),
+    % checkRent(Index),
 
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
