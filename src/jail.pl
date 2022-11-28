@@ -1,4 +1,4 @@
-:- include('player.pl').
+% :- include('player.pl').
 
 
 goToJail(Nama):-
