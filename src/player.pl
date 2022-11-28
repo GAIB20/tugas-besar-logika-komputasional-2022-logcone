@@ -60,19 +60,16 @@ checkPlayerDetail(Nama) :-
 /* Display properti pemain */
 displayProperty([], _) :- true.
 displayProperty([X|Tail], Count) :-
-<<<<<<< HEAD
-    write('    '),write(Count), write('. '), write(X), write(' - '), write('Kondisi'), nl, % Kondisi (tanah, bangunan, landmark) added later
-=======
     retract(property(X, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     assertz(property(X, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    NilaiProperti is Akuisisi/2,
     (
-        (Tipe =:= 0 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Tanah\n'));
-        (Tipe =:= 1 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 1\n'));
-        (Tipe =:= 2 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 2\n'));
-        (Tipe =:= 3 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 3\n'));
-        (Tipe =:= 4 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Landmark\n'))
+        (Tipe =:= 0 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Tanah'),write(' - Nilai Properti: '), write(NilaiProperti), nl);
+        (Tipe =:= 1 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 1'),write(' - Nilai Properti: '), write(NilaiProperti), nl);
+        (Tipe =:= 2 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 2'),write(' - Nilai Properti: '), write(NilaiProperti), nl);
+        (Tipe =:= 3 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 3\n'),write(' - Nilai Properti: '), write(NilaiProperti), nl);
+        (Tipe =:= 4 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Landmark\n'),write(' - Nilai Properti: '), write(NilaiProperti), nl)
     ),
->>>>>>> 638dc1e25d50fad6e9711f313829abc82c3cd7f6
     Count_next is Count + 1,
     displayProperty(Tail, Count_next).
 
