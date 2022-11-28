@@ -140,6 +140,11 @@ payRent(NamaPemain, Indeks):-
     
 
 
-% sellProperty(NamaPemain):-
-%     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
-%     displayProperty
+payAkuisisi(Pemilik, ID_Properti):-
+    aset_pemain(Pemilik, Uang, Nilai_properti, Daftar_properti),
+    property(ID_Properti, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok),
+    NewMoney is Uang - Akuisisi,
+    asserta(property(ID_Properti, Nama_properti, Indeks, Deskripsi_properti, Tipe, NewMoney, Akuisisi, Blok)).
+
+% deskripsiProperti(ID_Properti, Nama_properti, Indeks, Deskripsi_properti).
+% propertyValue(ID, Buy0, Buy1, Buy2, Buy3, Buy4, Rent0, Rent1, Rent2, Rent3, Rent4).
