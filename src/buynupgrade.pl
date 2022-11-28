@@ -38,7 +38,7 @@ buy :-
                                 RentNew is Rent0 + Rent1 + Rent2);
                 (Tingkat == 3 -> HargaBuy is Buy0 + Buy1 + Buy2 + Buy3, 
                                 RentNew is Rent0 + Rent1 + Rent2 + Rent3);
-                write('    Input tingkat tidak valid >:(\n'), 
+                write('    Input tingkat tidak valid >:(\n'), ZZzz
                 assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tingkat, Rent, Akuisisi, Blok)),
                 assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
                 !, fail
