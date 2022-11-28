@@ -16,7 +16,7 @@ chanceCard(Nama) :-
     % random generator,
     random(1,6,_X),
     random(20,150,_Y),
-    % _X is 2,
+    % _X is 1,
     
     ((_X == 1 -> 
         payTax(Nama, Tax),

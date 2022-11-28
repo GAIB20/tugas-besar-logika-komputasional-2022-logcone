@@ -110,8 +110,20 @@ buy :-
 payTax(Nama, Tax) :-
     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
     Tax is 0.1*(Uang + Nilai_properti),
+    % Tax is 1001,
     UangNew is Uang - Tax,
-    assertz(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti)).
+    (
+        (UangNew >= 0) -> (
+            assertz(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti))
+        );
+
+        (UangNew < 0) -> (
+            assertz(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti)),
+            bangkrut,
+            payTax(Nama, Tax)
+        )
+    )
+    .
 
 worldTour(Pemain) :-
     write('    Pilih nama lokasi yang ingin kamu kunjungi'),nl,

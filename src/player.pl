@@ -76,7 +76,7 @@ displayProperty([X|Tail], Count) :-
 /* Display chance card pemain */
 displayCard([], _) :- true.
 displayCard([X|Tail], Count) :-
-    write(Count), write('. '), write(X), nl,
+    write('    '),write(Count), write('. '), write(X), nl,
     Count_next is Count + 1,
     displayCard(Tail, Count_next).
 

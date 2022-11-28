@@ -4,7 +4,7 @@
 propertyValue('A1',15,37,75,150,168,10,25,50,75,75).
 propertyValue('A2',15,40,78,156,175,10,27,52,78,78).
 propertyValue('A3',15,43,81,162,182,10,29,54,81,81).
-propertyValue('B1',30,45,90,180,202,20,30,60,90,90).
+propertyValue('B1',30,45,90,180,202,2000,30,60,90,90).
 propertyValue('B2',30,48,93,186,209,20,32,62,93,93).
 propertyValue('B3',30,51,96,192,216,20,34,64,96,96).
 propertyValue('C1',45,54,108,216,243,30,36,72,108,108).
@@ -123,6 +123,7 @@ checkRent(Indeks) :-
 
 payRent(NamaPemain, Indeks).
 payRent(NamaPemain, Indeks):-
+    write(Indeks),write(NamaPemain),
     % getLocation(Indeks, )
     checkRent(Index),
 
@@ -138,18 +139,97 @@ payRent(NamaPemain, Indeks):-
             retract(aset_pemain(NamaPemain, UangPemain, Nilai_properti_Pemain, Daftar_properti_Pemain)),
             
             UangPemainNew is UangPemain - Rent,
-            % nnti ditambahin kondisi ketika uang < 0 (mekanisme bangkrut)
-            assertz(aset_pemain(NamaPemain, UangPemainNew, Nilai_properti_Pemain, Daftar_properti_Pemain)),
-            
-            retract(aset_pemain(NamaPemilik, UangPemilik, Nilai_properti_Pemilik, Daftar_properti_Pemilik)),
-            UangPemilikNew is UangPemilik + Rent,
-            assertz(aset_pemain(NamaPemilik, UangPemilikNew, Nilai_properti_Pemilik, Daftar_properti_Pemilik))        
+            (UangPemainNew >= 0) -> (
+                assertz(aset_pemain(NamaPemain, UangPemainNew, Nilai_properti_Pemain, Daftar_properti_Pemain)),
+                retract(aset_pemain(NamaPemilik, UangPemilik, Nilai_properti_Pemilik, Daftar_properti_Pemilik)),
+                UangPemilikNew is UangPemilik + Rent,
+                assertz(aset_pemain(NamaPemilik, UangPemilikNew, Nilai_properti_Pemilik, Daftar_properti_Pemilik)) 
+            );
+            (UangPemainNew < 0) -> (
+                bangkrut,
+                payRent(NamaPemain, Indeks)
+            )
+       
         )
     )).
 
+
+
+
+emptyList([],1).
+emptyList([X|_],0).  
+
+list_length([], 0 ).
+list_length([_|T] , Res) :- list_length(T,Res1) , Res is Res1+1 .
+
+sellProperty:-
+    retract(list_player(ListNama, Giliran)),
+    assertz(list_player(ListNama, Giliran)),
+    getElmtList(ListNama, Giliran, Nama),
+
+    retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
+    assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
+
+    emptyList(Daftar_properti, X),
     
+    ((
+        (X == 0) -> (
+            displayProperty(Daftar_properti, 1),
+            list_length(Daftar_properti, Len),
+            write('\n    Pilih properti nomor brp yang mau dijual?: '),
+            read(NoProperti),                                        % Dpt nomor properti yang akan dijual
+            (
+                (Len >= NoProperti) -> (
+                    getElmtList(Daftar_properti, NoProperti, PropertiJual), % Dpt ID properti yang akan dijual
+                    retract(property(PropertiJual, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)), % Dpt nilai properti (akuisisi/2)
+                    assertz(property(PropertiJual, Nama_properti, Indeks, Deskripsi_properti, -1, 0, 0, Blok)),        
+                    UangNew is Uang + (Akuisisi*2/5), % Harga jual = 0.8 Nilai properti =  4/5 * 1/2 * akuisisi = 2/5*akuisisi
+                    NilaiPropertiNew is Nilai_properti - (Akuisisi/2),
+                    remover(PropertiJual, Daftar_properti, Daftar_properti_new),
+                    assertz(aset_pemain(Nama, UangNew, NilaiPropertiNew, Daftar_properti_new))
+                );
+
+                (Len < NoProperti) -> (
+                    write('    Pilihanmu tdk validdd')
+                )
+            )
+        )
+    );
+
+    (
+        (X == 1) -> (
+            write('    Tdk bisa jual krn anda gpunya properti :<'),
+            assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti))
+        )
+    )).
+    
+bangkrut:-
+    retract(list_player(ListNama, Giliran)),
+    assertz(list_player(ListNama, Giliran)),
+    getElmtList(ListNama, Giliran, Nama),
+
+    retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
+    assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),    
+    list_length(Daftar_properti, X),
+    write('\n    '),write(Nama), write(' bangkrutt. Km mau jual properti atau menyerah?\n\n    (Masukkan 0 untuk menyerah dan 1 untuk jual properti: '),
+    read(Input),
+    (
+        (Input == 0) -> (
+                GiliranNew is (Giliran mod 2) + 1,
+                getElmtList(ListNama, GiliranNew, Pemenang),
+                write('\n    YEYY SELAMATT '), write(Pemenang), write(', kamu menang wow keren bgt :D'),reset,!,fail
+        );
+        
+        (Input == 1) -> (
+            (X == 0) -> (
+                write('\n    Km dah gapunya properti yang bisa dijual :<<< km kalahhhh HUHU'),
+                GiliranNew is (Giliran mod 2) + 1,
+                getElmtList(ListNama, GiliranNew, Pemenang),
+                write('\n\n    YEYY SELAMATT '), write(Pemenang), write(', kamu menang wow keren bgt :D'),reset,!,fail                
+            );
+            (X > 0) -> (sellProperty)
+        )
+    ).
 
 
-% sellProperty(NamaPemain):-
-%     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
-%     displayProperty
+
