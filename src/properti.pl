@@ -113,26 +113,27 @@ checkPropertyDetail(ID) :-
     
 
 
-payRent(NamaPemain, ID_Properti):-
+payRent(NamaPemain, Indeks):-
+    % getLocation(Indeks, )
 
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-    write('test1'),
+    
     ((Tipe == -1);
     (Tipe \== -1) -> (
         kepemilikan(NamaPemilik, ID_Properti),
         (NamaPemilik == NamaPemain);
-        write('test2'),
         (NamaPemilik \== NamaPemain) -> (
-            write('Kamu numpang di wilayah lawan, harus bayar rent yaaaaa sebesar'), write(Rent),
+            write('    Kamu numpang di wilayah lawan, harus bayar rent yaaaaa sebesar '), write(Rent),
             retract(aset_pemain(NamaPemain, UangPemain, Nilai_properti_Pemain, Daftar_properti_Pemain)),
+            
             UangPemainNew is UangPemain - Rent,
             % nnti ditambahin kondisi ketika uang < 0 (mekanisme bangkrut)
             assertz(aset_pemain(NamaPemain, UangPemainNew, Nilai_properti_Pemain, Daftar_properti_Pemain)),
             
             retract(aset_pemain(NamaPemilik, UangPemilik, Nilai_properti_Pemilik, Daftar_properti_Pemilik)),
-            UangPemilikNew is UangPemilik + rent,
-            retract(aset_pemain(NamaPemilik, UangPemilikNew, Nilai_properti_Pemilik, Daftar_properti_Pemilik))        
+            UangPemilikNew is UangPemilik + Rent,
+            assertz(aset_pemain(NamaPemilik, UangPemilikNew, Nilai_properti_Pemilik, Daftar_properti_Pemilik))        
         )
     )).
 
