@@ -6,6 +6,7 @@
 startMap(
 /* Bentuk dari map awal*/
 [['              ','    ','    ','    ','    ','    ','    ','    ','    ','    ','              '],
+ ['              ','    ','    ','    ','    ','    ','    ','    ','    ','    ','              '],
  ['    ','    ',' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ','    ','    '],
  ['    ','    ',' |  FP  |  E1  |  E2  |  E3  |  CC2 |  F1  |  F2  |  F3  |  WT  | ','    ','    '],
  ['    ','    ',' |  D3  | - - - - - - - - - - - - - - - - - - - - - - -  |  G1  | ','    ','    '],
@@ -17,6 +18,7 @@ startMap(
  ['    ','    ',' |  C1  | - - - - - - - - - - - - - - - - - - - - - - -  |  H2  | ','    ','    '], 
  ['    ','    ',' |  JL  |  B3  |  B2  |  B1  |  CC1 |  A3  |  A2  |  A1  |  GO  | ','    ','    '],
  ['    ','    ',' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ','    ','    '],
+ ['              ','    ','    ','    ','    ','    ','    ','    ','    ','    ','              '],
  ['              ','    ','    ','    ','    ','    ','    ','    ','    ','    ','              ']]
 ).
 
@@ -44,6 +46,49 @@ setElmtMap(MapIn, X, Y, Val, MapOut):-
     getElmtList(MapIn, X, ValX),
     setElmtList(ValX, Y, Val, ListOut),
     setElmtList(MapIn, X, ListOut, MapOut).
+
+changeMapStatus(M, X, Y, Tipe, Giliran, Mout) :-
+    (
+        (Giliran =:= 1 ->
+            (
+                (Tipe =:= 0 ->
+                    setElmtMap(M, X, Y, ' X0 ', Mout)
+                );
+                (Tipe =:= 1 ->
+                    setElmtMap(M, X, Y, ' X1 ', Mout)
+                );
+                (Tipe =:= 2 ->
+                    setElmtMap(M, X, Y, ' X2 ', Mout)
+                );
+                (Tipe =:= 3 ->
+                    setElmtMap(M, X, Y, ' X3 ', Mout)
+                );
+                (Tipe =:= 4 ->
+                    setElmtMap(M, X, Y, ' XL ', Mout)
+                )
+            )
+        );
+        (Giliran =:= 2 ->
+            (
+                (Tipe =:= 0 ->
+                    setElmtMap(M, X, Y, ' Y0 ', Mout)
+                );
+                (Tipe =:= 1 ->
+                    setElmtMap(M, X, Y, ' Y1 ', Mout)
+                );
+                (Tipe =:= 2 ->
+                    setElmtMap(M, X, Y, ' Y2 ', Mout)
+                );
+                (Tipe =:= 3 ->
+                    setElmtMap(M, X, Y, ' Y3 ', Mout)
+                );
+                (Tipe =:= 4 ->
+                    setElmtMap(M, X, Y, ' YL ', Mout)
+                )
+            )
+        )
+    ).
+
 
 
 /* Display Map */
@@ -119,11 +164,26 @@ checkLocation(Nama, Index):-
     ).
 
 checkLocation(Nama, Index):-
-    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 25, Index \= 30,
+    Index =\= 5, Index =\= 9, Index =\= 13, Index =\= 17, Index =\= 21, Index =\= 25, Index =\= 29, Index =\= 30,
     payRent(Nama, Index).
 
 checkLocationDetail(ID) :-
-    retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    ((ID == 'CC1' ; ID == 'CC2'; ID == 'CC3'),
+    write('Nama Lokasi       :  Chance Card'),nl,
+    write('Deskripsi Lokasi  :  Keberuntunganmu diuji disini...'),nl,nl,
+    write('Daftar kartu-kartu : '),nl,
+    write('1. Kartu Pajak'),nl,
+    write('2. Kartu DUIT $$$'),nl,
+    write('3. Kartu bebas penjara'),nl,
+    write('4. Kartu masuk penjara'),nl,
+    write('5. Kartu menuju GO'),nl,
+    write('6. Kartu ga ngapa-ngapain'),nl,!);
+    ((ID == 'TX1' ; ID == 'TX2' ),
+    write('Nama Lokasi       :  Tax'),nl,
+    write('Deskripsi Lokasi  :  Bayar pajak woi. Pajaknya cuma sebesar'), write(Tax),write('lho!'),!);
+    ((ID == 'WT'),write('Nama Lokasi       :  World Tour'),nl,
+    write('Deskripsi Lokasi  :  Kmu bisa kemana aj bagaikan doraemon.'),!);
+    (retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     write('    Nama Lokasi          : '), write(Nama_properti),nl,
     write('    Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
@@ -132,7 +192,11 @@ checkLocationDetail(ID) :-
     write('    Biaya sewa saat ini  : '), write(Rent),nl,
     write('    Biaya Akuisisi       : '), write(Akuisisi), nl,
     write('    Tingkatan properti   : '),
-    writeTingkatan(Tipe).
+    writeTingkatan(Tipe)).
+
+
+                                       
+
     
 writeTingkatan(Tingkat):-
     (Tingkat == 0; Tingkat == -1) -> write('Tanah');
