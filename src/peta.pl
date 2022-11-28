@@ -45,6 +45,49 @@ setElmtMap(MapIn, X, Y, Val, MapOut):-
     setElmtList(ValX, Y, Val, ListOut),
     setElmtList(MapIn, X, ListOut, MapOut).
 
+changeMapStatus(M, X, Y, Tipe, Giliran, Mout) :-
+    (
+        (Giliran =:= 1 ->
+            (
+                (Tipe =:= 0 ->
+                    setElmtMap(M, X, Y, ' X0 ', Mout)
+                );
+                (Tipe =:= 1 ->
+                    setElmtMap(M, X, Y, ' X1 ', Mout)
+                );
+                (Tipe =:= 2 ->
+                    setElmtMap(M, X, Y, ' X2 ', Mout)
+                );
+                (Tipe =:= 3 ->
+                    setElmtMap(M, X, Y, ' X3 ', Mout)
+                );
+                (Tipe =:= 4 ->
+                    setElmtMap(M, X, Y, ' XL ', Mout)
+                )
+            )
+        );
+        (Giliran =:= 2 ->
+            (
+                (Tipe =:= 0 ->
+                    setElmtMap(M, X, Y, ' Y0 ', Mout)
+                );
+                (Tipe =:= 1 ->
+                    setElmtMap(M, X, Y, ' Y1 ', Mout)
+                );
+                (Tipe =:= 2 ->
+                    setElmtMap(M, X, Y, ' Y2 ', Mout)
+                );
+                (Tipe =:= 3 ->
+                    setElmtMap(M, X, Y, ' Y3 ', Mout)
+                );
+                (Tipe =:= 4 ->
+                    setElmtMap(M, X, Y, ' YL ', Mout)
+                )
+            )
+        )
+    ).
+
+
 
 /* Display Map */
 printList([A]):-write(A),nl,!.
@@ -119,7 +162,7 @@ checkLocation(Nama, Index):-
     ).
 
 checkLocation(Nama, Index):-
-    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 25, Index \= 30,
+    Index =\= 5, Index =\= 9, Index =\= 13, Index =\= 17, Index =\= 21, Index =\= 25, Index =\= 29, Index =\= 30,
     payRent(Nama, Index).
 
 checkLocationDetail(ID) :-
