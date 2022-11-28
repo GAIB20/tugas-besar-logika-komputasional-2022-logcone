@@ -36,7 +36,7 @@ throwDice :-        % Untuk yang ga dipenjara
     % random(1, 7, Dadu_1), 
     % random(1, 7, Dadu_2),
     Dadu_1 is 2,
-    Dadu_2 is 3,
+    Dadu_2 is 2,
     retract(count_pemain(Nama, Count_jail, Count_double)),
     assertz(count_pemain(Nama, Count_jail, Count_double)),
     Count_jail == 0,
