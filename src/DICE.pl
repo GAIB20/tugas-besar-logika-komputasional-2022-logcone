@@ -14,7 +14,7 @@ throwDice :-        % Untuk yang dipenjara
 
     % random(1, 7, Dadu_1), 
     % random(1, 7, Dadu_2),
-    Dadu_1 is 2,
+    Dadu_1 is 1,
     Dadu_2 is 3,
 
     write('    Dadu 1 : '),write(Dadu_1), nl,
@@ -35,8 +35,8 @@ throwDice :-        % Untuk yang ga dipenjara
     getElmtList(ListNama, Giliran, Nama),
     % random(1, 7, Dadu_1), 
     % random(1, 7, Dadu_2),
-    Dadu_1 is 2,
-    Dadu_2 is 2,
+    Dadu_1 is 1,
+    Dadu_2 is 3,
     retract(count_pemain(Nama, Count_jail, Count_double)),
     assertz(count_pemain(Nama, Count_jail, Count_double)),
     Count_jail == 0,

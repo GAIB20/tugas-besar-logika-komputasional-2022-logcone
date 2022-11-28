@@ -1,6 +1,12 @@
 % :-include('player.pl').
 % :-include('buynupgrade.pl').
 
+moveToGo(Nama):-
+    retract(lokasi_pemain(Nama, IndexLoc)),
+    IndeksGo is 1,
+    passGO(Nama, IndexLoc, IndeksGo),
+    assertz(lokasi_pemain(Nama, IndeksGo)).
+
 moveToTax(Nama):-
     retract(lokasi_pemain(Nama, IndexLoc)),
     (((IndexLoc == 5) -> IndexNew is 13);
@@ -74,13 +80,26 @@ chanceCard(Nama) :-
         write('    =================================================\n'),nl,
         addCard(Nama, 'GJ'))
         ;
-    (_X == 5 ->
+    (_X == 5 -> 
+        moveToGo(Nama),
+        write('\n    ================================================='),nl,
+        write('    ||       PU[LANG] KE [GO] A.K.A [GOLANG]       ||'),nl,
+        write('    ================================================='),nl,
+        write('    ||                                             ||'),nl,
+        write('    ||           BALIK KE GO DULU GAESSSS          ||'),nl,
+        write('    ||         JANGAN LUPA DI GO AMBIL UANG        ||'),nl,
+        write('    ||  JATAH MAKAN SIANG, TOLONG JANGAN DITILEP   ||'),nl,
+        write('    ||                                             ||'),nl,
+        write('    =================================================\n'),nl
+        )
+        ;
+    (_X == 6 ->
         write('\n    ================================================='),nl,
         write('    ||       HAHA KAMU NANYEA INI KARTU APA ???    ||'),nl,
         write('    ================================================='),nl,
         write('    ||                                             ||'),nl,
         write('    ||        KARTU INI GK AKAN NGARUH APA2        ||'),nl,
-        write('    ||       SEPERTI EFFORT KAMU KE SI \'DIA\'     ||'),nl,
+        write('    ||       SEPERTI EFFORT KAMU KE SI \'DIA\'       ||'),nl,
         write('    ||        SAMA2 GK AKAN NGARUHIN HATINYA       ||'),nl,
         write('    ||                                             ||'),nl,
         write('    =================================================\n'),nl
