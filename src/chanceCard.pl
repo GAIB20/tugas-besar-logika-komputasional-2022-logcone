@@ -14,7 +14,7 @@ addCard(Nama, X) :-
 
 chanceCard(Nama) :-
     % random generator,
-    random(1,4,_X),
+    random(1,6,_X),
     % write('hooray'),
     random(20,150,_Y),
     % _X is 2,
@@ -72,6 +72,18 @@ chanceCard(Nama) :-
         write('    ||    GAPAPA YA PENJARANYA KAYAK HOTEL KOK     ||'),nl,
         write('    ||                                             ||'),nl,
         write('    ================================================='),nl,
-        addCard(Nama, 'GJ')
-    )).   % kemudian manggil predicate jail
+        addCard(Nama, 'GJ'))
+        ;
+    (_X == 5 ->
+        write('    ================================================='),nl,
+        write('    ||       HAHA KAMU NANYEA INI KARTU APA ???    ||'),nl,
+        write('    ================================================='),nl,
+        write('    ||                                             ||'),nl,
+        write('    ||        KARTU INI GK AKAN NGARUH APA2        ||'),nl,
+        write('    ||       SEPERTI EFFORT KAMU KE SI \'DIA\'       ||'),nl,
+        write('    ||        SAMA2 GK AKAN NGARUHIN HATINYA       ||'),nl,
+        write('    ||                                             ||'),nl,
+        write('    ================================================='),nl
+    )
+    ).   % kemudian manggil predicate jail
     
