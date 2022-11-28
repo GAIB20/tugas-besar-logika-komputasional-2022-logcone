@@ -55,7 +55,12 @@ buy :-
                     AkuisisiNew is HargaBuy*2,
                     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tingkat, RentNew, AkuisisiNew, Blok)),
                     assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti_new)),
-                    write('    Selamat km berhasil beli properti baru :>')
+                    write('    Selamat km berhasil beli properti baru :>'),
+                    getXY(Indeks, X, Y),
+                    retract(map(M)),
+                    changeMapStatus(M, X, Y, Tingkat, Giliran, Mout),
+                    assertz(map(Mout)),
+                    displayMap(Mout)
                 ), !
             )
         );
@@ -89,12 +94,12 @@ buy :-
                                 remover(ID, Daftar_properti_old, Daftar_properti_new2),
                                 Nilai_properti_updated is Nilai_properti_old - div(Akuisisi, 2),
                                 assertz(aset_pemain(NamaPemilikOld, UangOld, Nilai_properti_updated, Daftar_properti_new2)),
-                                write('    Km berhasil ambil alih properti musuh :>>')
-
-                                % getXY(Indeks, X, Y),
-                                % retract(map(M)),
-                                % ((Tipe =!= 0 -> ))
-                                % setElmtMap(M, X, Y, )
+                                write('    Km berhasil ambil alih properti musuh :>>'),
+                                getXY(Indeks, X, Y),
+                                retract(map(M)),
+                                changeMapStatus(M, X, Y, Tipe, Giliran, Mout),
+                                assertz(map(Mout)),
+                                displayMap(Mout)
                             )
                         )     
                     );
@@ -176,7 +181,12 @@ upgrade :-
                         AkuisisiNew is Akuisisi + (Buy1 * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
                         assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent1, AkuisisiNew, Blok)),
-                        write('    Km berhasil upgrade :>>')
+                        write('    Km berhasil upgrade :>>'),
+                        getXY(Indeks, X, Y),
+                        retract(map(M)),
+                        changeMapStatus(M, X, Y, Up, Giliran, Mout),
+                        assertz(map(Mout)),
+                        displayMap(Mout)
                     );
                     (Up == 2 ->  
                         UangNew is Uang - (Buy1+Buy2),
@@ -186,7 +196,12 @@ upgrade :-
                         AkuisisiNew is Akuisisi + ((Buy1+Buy2) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
                         assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent2, AkuisisiNew, Blok)),
-                        write('    Km berhasil upgrade :>>')
+                        write('    Km berhasil upgrade :>>'),
+                        getXY(Indeks, X, Y),
+                        retract(map(M)),
+                        changeMapStatus(M, X, Y, Up, Giliran, Mout),
+                        assertz(map(Mout)),
+                        displayMap(Mout)
                     );
                     (Up == 3 ->  
                         UangNew is Uang - (Buy1+Buy2 + Buy3),
@@ -196,7 +211,12 @@ upgrade :-
                         AkuisisiNew is Akuisisi + ((Buy1+Buy2+Buy3) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
                         assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent3, AkuisisiNew, Blok)),
-                        write('    Km berhasil upgrade :>>')
+                        write('    Km berhasil upgrade :>>'),
+                        getXY(Indeks, X, Y),
+                        retract(map(M)),
+                        changeMapStatus(M, X, Y, Up, Giliran, Mout),
+                        assertz(map(Mout)),
+                        displayMap(Mout)
                     );
                     (
                         write('    Input upgrade tidak valid >:(\n'),
@@ -216,7 +236,12 @@ upgrade :-
                         AkuisisiNew is Akuisisi + ((Buy2) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
                         assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent2, AkuisisiNew, Blok)),
-                        write('    Km berhasil upgrade :>>')
+                        write('    Km berhasil upgrade :>>'),
+                        getXY(Indeks, X, Y),
+                        retract(map(M)),
+                        changeMapStatus(M, X, Y, Up, Giliran, Mout),
+                        assertz(map(Mout)),
+                        displayMap(Mout)
                     );
                     (Up == 3 -> 
                         UangNew is Uang - (Buy2 + Buy3),
@@ -226,7 +251,12 @@ upgrade :-
                         AkuisisiNew is Akuisisi + ((Buy2+Buy3) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
                         assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent3, AkuisisiNew, Blok)),
-                        write('    Km berhasil upgrade :>>')
+                        write('    Km berhasil upgrade :>>'),
+                        getXY(Indeks, X, Y),
+                        retract(map(M)),
+                        changeMapStatus(M, X, Y, Up, Giliran, Mout),
+                        assertz(map(Mout)),
+                        displayMap(Mout)
                     );
                     (
                         write('    Input upgrade tidak valid >:(\n'),
@@ -246,7 +276,12 @@ upgrade :-
                         AkuisisiNew is Akuisisi + ((Buy3) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
                         assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent3, AkuisisiNew, Blok)),
-                        write('    Km berhasil upgrade :>>')
+                        write('    Km berhasil upgrade :>>'),
+                        getXY(Indeks, X, Y),
+                        retract(map(M)),
+                        changeMapStatus(M, X, Y, Up, Giliran, Mout),
+                        assertz(map(Mout)),
+                        displayMap(Mout)
                     );
                     (
                         write('    Input upgrade tidak valid >:(\n'),
@@ -266,7 +301,12 @@ upgrade :-
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)),
                         AkuisisiNew is Akuisisi + ((Buy4) * 2),
                         assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent4, AkuisisiNew, Blok)),
-                        write('    Km berhasil upgrade :>>')
+                        write('    Km berhasil upgrade :>>'),
+                        getXY(Indeks, X, Y),
+                        retract(map(M)),
+                        changeMapStatus(M, X, Y, Up, Giliran, Mout),
+                        assertz(map(Mout)),
+                        displayMap(Mout)
                     );
                     (
                         write('    Input upgrade tidak valid >:(\n'),

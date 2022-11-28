@@ -73,6 +73,13 @@ displayProperty([X|Tail], Count) :-
     Count_next is Count + 1,
     displayProperty(Tail, Count_next).
 
+displayPropertyWithValue([], _) :- true.
+displayPropertyWithValue([X|Tail], Count) :-
+    property(X, _, _, _, Tipe, _, _),
+    write(Count), write('. '), write(X), write(' - '), write(Tipe), nl,
+    Count_next is Count + 1,
+    displayPropertyWithValue(Tail, Count_next).
+
 /* Display chance card pemain */
 displayCard([], _) :- true.
 displayCard([X|Tail], Count) :-
