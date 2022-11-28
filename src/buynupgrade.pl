@@ -31,11 +31,11 @@ buy :-
                 (Tingkat == 0 -> HargaBuy is Buy0, 
                                 RentNew is Rent0);
                 (Tingkat == 1 -> HargaBuy is Buy0 + Buy1, 
-                                RentNew is Rent0 + Rent1);
+                                RentNew is Rent1);
                 (Tingkat == 2 -> HargaBuy is Buy0 + Buy1 + Buy2, 
-                                RentNew is Rent0 + Rent1 + Rent2);
+                                RentNew is Rent2);
                 (Tingkat == 3 -> HargaBuy is Buy0 + Buy1 + Buy2 + Buy3, 
-                                RentNew is Rent0 + Rent1 + Rent2 + Rent3);
+                                RentNew is Rent3);
                 write('    Input tingkat tidak valid >:(\n'), 
                 assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tingkat, Rent, Akuisisi, Blok)),
                 assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
@@ -45,14 +45,14 @@ buy :-
             (
                 (UangNew < 0 -> 
                     write('\n    Km gpunya uang yg cukup\n'), 
-                    assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+                    assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, RentNew, Akuisisi, Blok)),
                     assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)), !, fail
                 );
 
                 (UangNew >= 0 ->
                     Nilai_properti_new is Nilai_properti + HargaBuy, 
                     appendList(Daftar_properti, ID, Daftar_properti_new),
-                    AkuisisiNew is Nilai_properti_new*2,
+                    AkuisisiNew is HargaBuy*2,
                     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tingkat, RentNew, AkuisisiNew, Blok)),
                     assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti_new)),
                     write('    Selamat km berhasil beli properti baru :>')
@@ -110,7 +110,7 @@ buy :-
 payTax(Nama, Tax) :-
     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
     Tax is 0.1*(Uang + Nilai_properti),
-    % Tax is 1001,
+    % Tax is 993,
     UangNew is Uang - Tax,
     (
         (UangNew >= 0) -> (
@@ -119,8 +119,8 @@ payTax(Nama, Tax) :-
 
         (UangNew < 0) -> (
             assertz(aset_pemain(Nama, UangNew, Nilai_properti, Daftar_properti)),
-            bangkrut,
-            payTax(Nama, Tax)
+            write('    Duit kamu gacukup buat bayar pajak sebesar '),write(Tax),nl,
+            mekanismeBankru
         )
     )
     .
@@ -172,18 +172,20 @@ upgrade :-
                     (Up == 1 -> 
                         UangNew is Uang - Buy1,
                         UangNew >= 0,
-                        Nilai_properti_new is Nilai_properti + Buy1, TipeNew is 1, 
+                        Nilai_properti_new is Nilai_properti + Buy1, TipeNew is 1,
+                        AkuisisiNew is Akuisisi + (Buy1 * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
-                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent, Akuisisi, Blok)),
+                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent1, AkuisisiNew, Blok)),
                         write('    Km berhasil upgrade :>>')
                     );
                     (Up == 2 ->  
                         UangNew is Uang - (Buy1+Buy2),
                         UangNew >= 0,
                         Nilai_properti_new is Nilai_properti + (Buy1+Buy2), 
-                        TipeNew is 2, 
+                        TipeNew is 2,
+                        AkuisisiNew is Akuisisi + ((Buy1+Buy2) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
-                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent, Akuisisi, Blok)),
+                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent2, AkuisisiNew, Blok)),
                         write('    Km berhasil upgrade :>>')
                     );
                     (Up == 3 ->  
@@ -191,8 +193,9 @@ upgrade :-
                         UangNew >= 0,
                         Nilai_properti_new is Nilai_properti + (Buy1+Buy2+Buy3), 
                         TipeNew is 3, 
+                        AkuisisiNew is Akuisisi + ((Buy1+Buy2+Buy3) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
-                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent, Akuisisi, Blok)),
+                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent3, AkuisisiNew, Blok)),
                         write('    Km berhasil upgrade :>>')
                     );
                     (
@@ -209,9 +212,10 @@ upgrade :-
                         UangNew is Uang - (Buy2),
                         UangNew >= 0,
                         Nilai_properti_new is Nilai_properti + (Buy2), 
-                        TipeNew is 2, 
+                        TipeNew is 2,
+                        AkuisisiNew is Akuisisi + ((Buy2) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
-                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent, Akuisisi, Blok)),
+                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent2, AkuisisiNew, Blok)),
                         write('    Km berhasil upgrade :>>')
                     );
                     (Up == 3 -> 
@@ -219,8 +223,9 @@ upgrade :-
                         UangNew >= 0,
                         Nilai_properti_new is Nilai_properti + (Buy2+Buy3), 
                         TipeNew is 3, 
+                        AkuisisiNew is Akuisisi + ((Buy2+Buy3) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
-                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent, Akuisisi, Blok)),
+                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent3, AkuisisiNew, Blok)),
                         write('    Km berhasil upgrade :>>')
                     );
                     (
@@ -237,9 +242,10 @@ upgrade :-
                         UangNew is Uang - (Buy3),
                         UangNew >= 0,
                         Nilai_properti_new is Nilai_properti + (Buy3), 
-                        TipeNew is 3, 
+                        TipeNew is 3,
+                        AkuisisiNew is Akuisisi + ((Buy3) * 2),
                         assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
-                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent, Akuisisi, Blok)),
+                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent3, AkuisisiNew, Blok)),
                         write('    Km berhasil upgrade :>>')
                     );
                     (
@@ -257,8 +263,9 @@ upgrade :-
                         UangNew >= 0,
                         Nilai_properti_new is Nilai_properti + (Buy4), 
                         TipeNew is 4, 
-                        assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)), 
-                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent, Akuisisi, Blok)),
+                        assertz(aset_pemain(Nama, UangNew, Nilai_properti_new, Daftar_properti)),
+                        AkuisisiNew is Akuisisi + ((Buy4) * 2),
+                        assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, TipeNew, Rent4, AkuisisiNew, Blok)),
                         write('    Km berhasil upgrade :>>')
                     );
                     (

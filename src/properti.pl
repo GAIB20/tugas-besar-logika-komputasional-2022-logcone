@@ -4,7 +4,7 @@
 propertyValue('A1',15,37,75,150,168,10,25,50,75,75).
 propertyValue('A2',15,40,78,156,175,10,27,52,78,78).
 propertyValue('A3',15,43,81,162,182,10,29,54,81,81).
-propertyValue('B1',30,45,90,180,202,2000,30,60,90,90).
+propertyValue('B1',30,45,90,180,202,20,30,60,90,90).
 propertyValue('B2',30,48,93,186,209,20,32,62,93,93).
 propertyValue('B3',30,51,96,192,216,20,34,64,96,96).
 propertyValue('C1',45,54,108,216,243,30,36,72,108,108).
@@ -121,11 +121,11 @@ checkRent(Indeks) :-
     Indeks =\= 29,
     Indeks =\= 30.
 
-payRent(NamaPemain, Indeks).
+% payRent(NamaPemain, Indeks).
 payRent(NamaPemain, Indeks):-
-    write(Indeks),write(NamaPemain),
+    % write(Indeks),write(NamaPemain),
     % getLocation(Indeks, )
-    checkRent(Index),
+    % checkRent(Index),
 
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
@@ -139,17 +139,24 @@ payRent(NamaPemain, Indeks):-
             retract(aset_pemain(NamaPemain, UangPemain, Nilai_properti_Pemain, Daftar_properti_Pemain)),
             
             UangPemainNew is UangPemain - Rent,
-            (UangPemainNew >= 0) -> (
-                assertz(aset_pemain(NamaPemain, UangPemainNew, Nilai_properti_Pemain, Daftar_properti_Pemain)),
-                retract(aset_pemain(NamaPemilik, UangPemilik, Nilai_properti_Pemilik, Daftar_properti_Pemilik)),
-                UangPemilikNew is UangPemilik + Rent,
-                assertz(aset_pemain(NamaPemilik, UangPemilikNew, Nilai_properti_Pemilik, Daftar_properti_Pemilik)) 
-            );
-            (UangPemainNew < 0) -> (
-                bangkrut,
-                payRent(NamaPemain, Indeks)
+            (
+                (UangPemainNew >= 0) -> (
+                    assertz(aset_pemain(NamaPemain, UangPemainNew, Nilai_properti_Pemain, Daftar_properti_Pemain)),
+                    retract(aset_pemain(NamaPemilik, UangPemilik, Nilai_properti_Pemilik, Daftar_properti_Pemilik)),
+                    UangPemilikNew is UangPemilik + Rent,
+                    assertz(aset_pemain(NamaPemilik, UangPemilikNew, Nilai_properti_Pemilik, Daftar_properti_Pemilik)) 
+                );
+                (UangPemainNew < 0) -> (
+                    % write('test'),
+                    assertz(aset_pemain(NamaPemain, UangPemainNew, Nilai_properti_Pemain, Daftar_properti_Pemain)),
+                    write('    Uang kamu gacukup nih buat bayar rent sebesar'), write(Rent), nl,
+                    mekanismeBankrut,
+                    retract(aset_pemain(NamaPemilik, UangPemilik, Nilai_properti_Pemilik, Daftar_properti_Pemilik)),
+                    UangPemilikNew is UangPemilik + Rent,
+                    assertz(aset_pemain(NamaPemilik, UangPemilikNew, Nilai_properti_Pemilik, Daftar_properti_Pemilik)) 
+                    
+                )
             )
-       
         )
     )).
 
@@ -161,6 +168,21 @@ emptyList([X|_],0).
 
 list_length([], 0 ).
 list_length([_|T] , Res) :- list_length(T,Res1) , Res is Res1+1 .
+
+displaySellProperty([], _) :- true.
+displaySellProperty([X|Tail], Count) :-
+    retract(property(X, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    assertz(property(X, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    NilaiProperti is (Akuisisi/2)*0.8,
+    (
+        (Tipe =:= 0 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Tanah'),write(' - Nilai Properti: '), write(NilaiProperti), nl);
+        (Tipe =:= 1 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 1'),write(' - Nilai Properti: '), write(NilaiProperti), nl);
+        (Tipe =:= 2 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 2'),write(' - Nilai Properti: '), write(NilaiProperti), nl);
+        (Tipe =:= 3 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Bangunan 3'),write(' - Nilai Properti: '), write(NilaiProperti), nl);
+        (Tipe =:= 4 -> write('    '), write(Count), write('. '), write(X), write(' - '), write('Landmark'),write(' - Nilai Properti: '), write(NilaiProperti), nl)
+    ),
+    Count_next is Count + 1,
+    displaySellProperty(Tail, Count_next).
 
 sellProperty:-
     retract(list_player(ListNama, Giliran)),
@@ -174,7 +196,7 @@ sellProperty:-
     
     ((
         (X == 0) -> (
-            displayProperty(Daftar_properti, 1),
+            displaySellProperty(Daftar_properti, 1),
             list_length(Daftar_properti, Len),
             write('\n    Pilih properti nomor brp yang mau dijual?: '),
             read(NoProperti),                                        % Dpt nomor properti yang akan dijual
@@ -211,7 +233,7 @@ bangkrut:-
     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
     assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),    
     list_length(Daftar_properti, X),
-    write('\n    '),write(Nama), write(' bangkrutt. Km mau jual properti atau menyerah?\n\n    (Masukkan 0 untuk menyerah dan 1 untuk jual properti: '),
+    write('\n\n\n    '),write(Nama), write(' bangkrutt\n    Uang kamu negatif. Km mau jual properti atau menyerah?\n\n    (Masukkan 0 untuk menyerah dan 1 untuk jual properti: '),
     read(Input),
     (
         (Input == 0) -> (
@@ -227,9 +249,26 @@ bangkrut:-
                 getElmtList(ListNama, GiliranNew, Pemenang),
                 write('\n\n    YEYY SELAMATT '), write(Pemenang), write(', kamu menang wow keren bgt :D'),reset,!,fail                
             );
-            (X > 0) -> (sellProperty)
+            (X > 0) -> (
+                write('    Uang kamu sekarang: '),write(Uang),nl,sellProperty
+            )
         )
     ).
+
+mekanismeBankrut:-
+    retract(list_player(ListNama, Giliran)),
+    assertz(list_player(ListNama, Giliran)),
+    getElmtList(ListNama, Giliran, Nama),
+
+    retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
+    assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),  
+    (
+        (Uang < 0) -> (bangkrut);
+        (Uang >=0)
+    ).
+
+
+
 
 
 

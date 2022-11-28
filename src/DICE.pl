@@ -12,10 +12,10 @@ throwDice :-        % Untuk yang dipenjara
     assertz(list_player(ListNama, Giliran)),
     getElmtList(ListNama, Giliran, Nama),
 
-    random(1, 7, Dadu_1), 
-    random(1, 7, Dadu_2),
-    % Dadu_1 is 2,
-    % Dadu_2 is 1,
+    % random(1, 7, Dadu_1), 
+    % random(1, 7, Dadu_2),
+    Dadu_1 is 1,
+    Dadu_2 is 3,
 
     write('    Dadu 1 : '),write(Dadu_1), nl,
     write('    Dadu 2 : '), write(Dadu_2),nl, 
@@ -33,10 +33,10 @@ throwDice :-        % Untuk yang ga dipenjara
     assertz(list_player(ListNama, Giliran)),
 
     getElmtList(ListNama, Giliran, Nama),
-    % random(1, 7, Dadu_1), 
-    % random(1, 7, Dadu_2),
-    Dadu_1 is 2,
-    Dadu_2 is 3,
+    random(1, 7, Dadu_1), 
+    random(1, 7, Dadu_2),
+    % Dadu_1 is 2,
+    % Dadu_2 is 3,
     retract(count_pemain(Nama, Count_jail, Count_double)),
     assertz(count_pemain(Nama, Count_jail, Count_double)),
     Count_jail == 0,
@@ -75,7 +75,8 @@ checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew) :-
     % write(Nama),
     passGO(Nama, Indeks, IndeksNew),
     checkLocation(Nama, IndeksNew),
-    payRent(Nama, IndeksNew),
+    % payRent(Nama, IndeksNew),
+
 
     Count_doubleNew is Count_double + 1,
     % write(Count_double), write(Giliran),
@@ -94,7 +95,7 @@ checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew) :-
     assertz(lokasi_pemain(Nama, IndeksNew)),
     passGO(Nama, Indeks, IndeksNew),
     checkLocation(Nama, IndeksNew),
-    payRent(Nama, IndeksNew),
+    % payRent(Nama, IndeksNew),
 
     Count_doubleNew is 0,!.
 

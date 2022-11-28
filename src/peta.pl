@@ -119,7 +119,9 @@ checkLocation(Nama, Index):-
     ).
 
 checkLocation(Nama, Index):-
-    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 25, Index \= 30.
+    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 25, Index \= 30,
+    % write(Index),
+    payRent(Nama, Index).
 
 checkLocationDetail(ID) :-
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),

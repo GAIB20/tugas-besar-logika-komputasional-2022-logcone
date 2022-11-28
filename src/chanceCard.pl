@@ -1,6 +1,12 @@
 % :-include('player.pl').
 % :-include('buynupgrade.pl').
 
+moveToGo(Nama):-
+    retract(lokasi_pemain(Nama, IndexLoc)),
+    IndeksGo is 1,
+    passGO(Nama, IndexLoc, IndeksGo),
+    assertz(lokasi_pemain(Nama, IndeksGo)).
+
 moveToTax(Nama):-
     retract(lokasi_pemain(Nama, IndexLoc)),
     (((IndexLoc == 5) -> IndexNew is 13);
@@ -15,12 +21,15 @@ addCard(Nama, X) :-
 chanceCard(Nama) :-
     % random generator,
     random(1,6,_X),
+    % write('hooray'),
     random(20,150,_Y),
     % _X is 1,
     
     ((_X == 1 -> 
-        payTax(Nama, Tax),
-        moveToTax(Nama),
+        moveToTax(Nama), 
+        retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
+        assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
+        TaxDisplay is (Uang + Nilai_properti)*0.1,
         % Tax is 30,
         write('\n    ================================================='),nl,
         write('    ||               TAAT BAYAR PAJAK              ||'),nl,
@@ -29,10 +38,10 @@ chanceCard(Nama) :-
         write('    ||  MY POST : GANTENG? REVIEW SALDONYA DONGGG  ||'),nl,
         write('    ||    NOTIF : DITJEN PAJAK REPLY YOUR POST     ||'),nl,
         write('    ||           GANTENGNYAAAA !! (love)           ||'),nl,
-        write('                        '),write(Tax),nl,
+        write('                        '),write(TaxDisplay),nl,
         write('    ||                                             ||'),nl,
         write('    =================================================\n'),nl,
-        write('    Anda dipindahkan ke lokasi TAX terdekat >_o')) % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat
+        write('    Anda dipindahkan ke lokasi TAX terdekat >_o\n'),payTax(Nama, Tax)) % kemudian manggil predicate yang tujuannya mindahin player ke lokasi tax terdekat
         ;
     (_X == 2 -> 
         write('\n    ================================================='),nl,
@@ -73,13 +82,26 @@ chanceCard(Nama) :-
         write('    =================================================\n'),nl,
         addCard(Nama, 'GJ'))
         ;
-    (_X == 5 ->
+    (_X == 5 -> 
+        moveToGo(Nama),
+        write('\n    ================================================='),nl,
+        write('    ||       PU[LANG] KE [GO] A.K.A [GOLANG]       ||'),nl,
+        write('    ================================================='),nl,
+        write('    ||                                             ||'),nl,
+        write('    ||           BALIK KE GO DULU GAESSSS          ||'),nl,
+        write('    ||         JANGAN LUPA DI GO AMBIL UANG        ||'),nl,
+        write('    ||  JATAH MAKAN SIANG, TOLONG JANGAN DITILEP   ||'),nl,
+        write('    ||                                             ||'),nl,
+        write('    =================================================\n'),nl
+        )
+        ;
+    (_X == 6 ->
         write('\n    ================================================='),nl,
         write('    ||       HAHA KAMU NANYEA INI KARTU APA ???    ||'),nl,
         write('    ================================================='),nl,
         write('    ||                                             ||'),nl,
         write('    ||        KARTU INI GK AKAN NGARUH APA2        ||'),nl,
-        write('    ||       SEPERTI EFFORT KAMU KE SI \'DIA\'     ||'),nl,
+        write('    ||       SEPERTI EFFORT KAMU KE SI \'DIA\'       ||'),nl,
         write('    ||        SAMA2 GK AKAN NGARUHIN HATINYA       ||'),nl,
         write('    ||                                             ||'),nl,
         write('    =================================================\n'),nl
