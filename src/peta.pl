@@ -123,20 +123,22 @@ checkLocation(Nama, Index):-
 checkLocationDetail(ID) :-
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-    write('Nama Lokasi          : '), write(Nama_properti),nl,
-    write('Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
+    write('    Nama Lokasi          : '), write(Nama_properti),nl,
+    write('    Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
     kepemilikan(Pemilik, ID),
-    write('Kepemilikan          : '), write(Pemilik), nl,
-    write('Biaya sewa saat ini  : '), write(Rent),nl,
-    write('Biaya Akuisis        : '), write(Akuisisi), nl,
-    ((Tipe == -1) -> write('Tingkatan properti   : '), write(0));
-    ((Tipe \== -1) -> write('Tingkatan properti   : '), write(Tipe)),!,
-    ((Tipe =:= 0 -> write('Tanah'), nl);
-    (Tipe =:= 1 -> write('Bangunan 1'), nl);
-    (Tipe =:= 2 -> write('Bangunan 2'), nl);
-    (Tipe =:= 3 -> write('Bangunan 3'), nl);
-    (Tipe =:= 4 -> write('Landmark'), nl)),!.
+    write('    Kepemilikan          : '), write(Pemilik), nl,
+    write('    Biaya sewa saat ini  : '), write(Rent),nl,
+    write('    Biaya Akuisis        : '), write(Akuisisi), nl,
+    write('    Tingkatan properti   : '),
+    writeTingkatan(Tipe).
     
+writeTingkatan(Tingkat):-
+    (Tingkat == 0; Tingkat == -1) -> write('Tanah');
+    (Tingkat == 1 -> write('Bangunan 1'), nl);
+    (Tingkat == 2 -> write('Bangunan 2'), nl);
+    (Tingkat == 3 -> write('Bangunan 3'), nl);
+    (Tingkat == 4 -> write('Landmark'), nl),!.
+
 
 /* Operation of a Map */
 initMap:-startMap(M),assertz(map(M)),displayBoard.

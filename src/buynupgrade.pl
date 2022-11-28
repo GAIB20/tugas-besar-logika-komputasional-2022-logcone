@@ -12,12 +12,13 @@ buy :-
     retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     retract(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
     % write(Pemilik),
-    write(Buy0),
     
     (
         (Pemilik == 'None' -> 
             write('Ingin bangun sampai tingkat berapa? (0/1/2/3): \n'),  
             read(Tingkat),
+            % write(atomic(Tipe)),
+            % write(atomic(Tingkat)),
             (
                 (Tingkat == 0 -> HargaBuy is Buy0, 
                                 RentNew is Rent0);
@@ -27,8 +28,9 @@ buy :-
                                 RentNew is Rent0 + Rent1 + Rent2);
                 (Tingkat == 3 -> HargaBuy is Buy0 + Buy1 + Buy2 + Buy3, 
                                 RentNew is Rent0 + Rent1 + Rent2 + Rent3);
-                write('Input tingkat tidak valid >:(\n'), 
-                assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+                write('    Input tingkat tidak valid >:(\n'), 
+                % atom_number(Tingkat, TingkatInt),
+                assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tingkat, Rent, Akuisisi, Blok)),
                 assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti)),
                 !, fail
             ),
@@ -59,7 +61,7 @@ buy :-
     ((Pemilik \== 'None', Pemilik \== Nama) -> UangNew is Uang - Akuisisi,
             (
                 (UangNew < 0 ->  
-                    write('Km gpunya uang yg cukup'),
+                    write('    Km gpunya uang yg cukup'),
                     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
                     assertz(aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti))
                 );                                            

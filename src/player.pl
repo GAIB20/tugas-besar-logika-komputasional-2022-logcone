@@ -7,6 +7,7 @@
 :- dynamic(count_pemain/3).
 :- dynamic(list_player/2).
 :- dynamic(jail_status/2).
+:- dynamic(bangkrut/1).
 
 /* rule pemain untuk informasi pemain secara keseluruhan */
 pemain(Nama, Indeks, Uang, Nilai_properti, Daftar_properti, Daftar_card, Count_jail, Count_double) :-
@@ -54,14 +55,21 @@ checkPlayerDetail(Nama) :-
     displayProperty(Daftar_properti, 1), nl,
     nl,
     write('    Daftar Kepemilikan Card      : '), nl,
-    displayCard(Daftar_card, 1), !.
+    displayCard(Daftar_card, 1).
 
 /* Display properti pemain */
 displayProperty([], _) :- true.
 displayProperty([X|Tail], Count) :-
-    write(Count), write('. '), write(X), write(' - '), write('Kondisi'), nl, % Kondisi (tanah, bangunan, landmark) added later
+    write('    '),write(Count), write('. '), write(X), write(' - '), write('Kondisi'), nl, % Kondisi (tanah, bangunan, landmark) added later
     Count_next is Count + 1,
     displayProperty(Tail, Count_next).
+
+displayPropertyWithValue([], _) :- true.
+displayPropertyWithValue([X|Tail], Count) :-
+    property(X, _, _, _, Tipe, _, _),
+    write(Count), write('. '), write(X), write(' - '), write(Tipe), nl,
+    Count_next is Count + 1,
+    displayPropertyWithValue(Tail, Count_next).
 
 /* Display chance card pemain */
 displayCard([], _) :- true.
@@ -74,10 +82,11 @@ appendList([], A, [A]).
 appendList([X|Tail], A, [X|Rest]) :-
     appendList(Tail, A, Rest).
 
-/* Reset data pemain */
-reset :-
-    retractall(nama_pemain(_)),
-    retractall(aset_pemain(_, _, _, _)),
-    retractall(lokasi_pemain(_, _, _)),
-    retractall(card_pemain(_, _)),
-    retractall(count_pemain(_, _, _)).
+/* Pemain bangkrut */
+% checkBangkrut :-
+%     aset_pemain(Nama, Uang, Nilai_properti, Daftar_properti),
+%     (Uang < )
+        
+% lanjut :-
+%     turn(Nama),
+%     displayProperty(Daftar_properti, 1),

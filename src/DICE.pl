@@ -75,6 +75,7 @@ checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew) :-
     % write(Nama),
     passGO(Nama, Indeks, IndeksNew),
     checkLocation(Nama, IndeksNew),
+    payRent(Nama, IndeksNew),
 
     Count_doubleNew is Count_double + 1,
     % write(Count_double), write(Giliran),
@@ -93,6 +94,7 @@ checkDouble(Nama, Dadu_1, Dadu_2, Count_jail, Count_double, Count_doubleNew) :-
     assertz(lokasi_pemain(Nama, IndeksNew)),
     passGO(Nama, Indeks, IndeksNew),
     checkLocation(Nama, IndeksNew),
+    payRent(Nama, IndeksNew),
 
     Count_doubleNew is 0,!.
 
