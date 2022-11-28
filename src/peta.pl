@@ -1,7 +1,7 @@
 :-dynamic(map/1).
-:-include('player.pl').
-:-include('chanceCard.pl').
-:-include('properti.pl').
+% :-include('player.pl').
+% :-include('chanceCard.pl').
+% :-include('properti.pl').
 
 startMap(
 /* Bentuk dari map awal*/
@@ -106,6 +106,7 @@ getIndexOf([_|T], Val, Index):-
   Index is Index1+1.
 
 getMapIndex(NamaLokasi, IdxLokasi):-
+/* Menampilkan index lokasi dari nama lokasi*/
     getIndexOf(['GO', 'A1','A2','A3','CC1','B1','B2','B3','JL','C1','C2','C3','TX1','D1','D2','D3','FP',
                 'E1','E2','E3','CC2','F1','F2','F3','WT','G1','G2','G3','TX2','CC3','H1','H2'], NamaLokasi, IdxLokasi).
 
@@ -120,24 +121,47 @@ checkLocation(Nama, Index):-
     ).
 
 checkLocation(Nama, Index):-
-    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 25, Index \= 30.
+    Index \= 5, Index \= 21, Index \= 30, Index \= 5, Index \= 21, Index \= 25, Index \= 30,
+    payRent(Nama, Index).
 
 checkLocationDetail(ID) :-
-    retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-    asserta(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
-    write('Nama Lokasi          : '), write(Nama_properti),nl,
-    write('Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
+    ((ID == 'CC1' ; ID == 'CC2'; ID == 'CC3'),
+    write('Nama Lokasi       :  Chance Card'),nl,
+    write('Deskripsi Lokasi  :  Keberuntunganmu diuji disini...'),nl,nl,
+    write('Daftar kartu-kartu : '),nl,
+    write('1. Kartu Pajak'),nl,
+    write('2. Kartu DUIT $$$'),nl,
+    write('3. Kartu bebas penjara'),nl,
+    write('4. Kartu masuk penjara'),nl,
+    write('5. Kartu menuju GO'),nl,
+    write('6. Kartu ga ngapa-ngapain'),nl,!);
+    ((ID == 'TX1' ; ID == 'TX2' ),
+    write('Nama Lokasi       :  Tax'),nl,
+    write('Deskripsi Lokasi  :  Bayar pajak woi. Pajaknya cuma sebesar'), write(Tax),write('lho!'),!);
+    ((ID == 'WT'),write('Nama Lokasi       :  World Tour'),nl,
+    write('Deskripsi Lokasi  :  Kmu bisa kemana aj bagaikan doraemon.'),!);
+    (retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
+    write('    Nama Lokasi          : '), write(Nama_properti),nl,
+    write('    Deskripsi Lokasi     : '), write(Deskripsi_properti),nl,
     kepemilikan(Pemilik, ID),
-    write('Kepemilikan          : '), write(Pemilik), nl,
-    write('Biaya sewa saat ini  : '), write(Rent),nl,
-    write('Biaya Akuisis        : '), write(Akuisisi), nl,
-    write('Tingkatan properti   : '), 
-    ((Tipe =:= 0 -> write('Tanah'), nl);
-    (Tipe =:= 1 -> write('Bangunan 1'), nl);
-    (Tipe =:= 2 -> write('Bangunan 2'), nl);
-    (Tipe =:= 3 -> write('Bangunan 3'), nl);
-    (Tipe =:= 4 -> write('Landmark'), nl)).
+    write('    Kepemilikan          : '), write(Pemilik), nl,
+    write('    Biaya sewa saat ini  : '), write(Rent),nl,
+    write('    Biaya Akuisisi       : '), write(Akuisisi), nl,
+    write('    Tingkatan properti   : '),
+    writeTingkatan(Tipe)).
+
+
+                                       
+
     
+writeTingkatan(Tingkat):-
+    (Tingkat == 0; Tingkat == -1) -> write('Tanah');
+    (Tingkat == 1 -> write('Bangunan 1'), nl);
+    (Tingkat == 2 -> write('Bangunan 2'), nl);
+    (Tingkat == 3 -> write('Bangunan 3'), nl);
+    (Tingkat == 4 -> write('Landmark'), nl),!.
+
 
 /* Operation of a Map */
 initMap:-startMap(M),assertz(map(M)),displayBoard.
