@@ -111,6 +111,8 @@ displayBoard:-
     write('                 Posisi pemain: '),nl,
     write('                 '),write(Nama1),write(': '),write(NamaLokasi1),nl,
     write('                 '),write(Nama2),write(': '),write(NamaLokasi2),nl,nl,
+    write('                 '),write('X pada peta adalah kepemilikan player 1.'), nl,
+    write('                 '),write('Y pada peta adalah kepemilikan player 2.'), nl,nl,
     getElmtList(ListNama, Giliran, NamaGiliran),
     write('                 '),write('Sekarang giliran '),write(NamaGiliran),
     assertz(list_player(ListNama, Giliran)).
@@ -178,9 +180,11 @@ checkLocationDetail(ID) :-
     write('6. Kartu ga ngapa-ngapain'),nl,!);
     ((ID == 'TX1' ; ID == 'TX2' ),
     write('Nama Lokasi       :  Tax'),nl,
-    write('Deskripsi Lokasi  :  Bayar pajak woi. Pajaknya cuma sebesar'), write(Tax),write('lho!'),!);
+    write('Deskripsi Lokasi  :  Bayar pajak woi. Pajaknya segede gaban gan! (maksudnya 10% doank)'),!);
     ((ID == 'WT'),write('Nama Lokasi       :  World Tour'),nl,
     write('Deskripsi Lokasi  :  Kmu bisa kemana aj bagaikan doraemon.'),!);
+    ((ID == 'FP'),write('Nama Lokasi       :  Free Parking'),nl,
+    write('Deskripsi Lokasi  :  Parking Gratisssss.'),!);
     (retract(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     assertz(property(ID, Nama_properti, Indeks, Deskripsi_properti, Tipe, Rent, Akuisisi, Blok)),
     write('    Nama Lokasi          : '), write(Nama_properti),nl,

@@ -12,10 +12,10 @@ throwDice :-        % Untuk yang dipenjara
     assertz(list_player(ListNama, Giliran)),
     getElmtList(ListNama, Giliran, Nama),
 
-    % random(1, 7, Dadu_1), 
-    % random(1, 7, Dadu_2),
-    Dadu_1 is 1,
-    Dadu_2 is 3,
+    random(1, 7, Dadu_1), 
+    random(1, 7, Dadu_2),
+    % Dadu_1 is 2,
+    % Dadu_2 is 3,
 
     write('    Dadu 1 : '),write(Dadu_1), nl,
     write('    Dadu 2 : '), write(Dadu_2),nl, 

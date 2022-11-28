@@ -149,7 +149,7 @@ payRent(NamaPemain, Indeks):-
                 (UangPemainNew < 0) -> (
                     % write('test'),
                     assertz(aset_pemain(NamaPemain, UangPemainNew, Nilai_properti_Pemain, Daftar_properti_Pemain)),
-                    write('    Uang kamu gacukup nih buat bayar rent sebesar'), write(Rent), nl,
+                    write('    Uang kamu gacukup nih buat bayar rent sebesar '), write(Rent), nl,
                     mekanismeBankrut,
                     retract(aset_pemain(NamaPemilik, UangPemilik, Nilai_properti_Pemilik, Daftar_properti_Pemilik)),
                     UangPemilikNew is UangPemilik + Rent,
